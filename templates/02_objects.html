@@ -80,7 +80,7 @@ p.say_hi();
     <h3>this</h3>
     <ul>
         <li class="fragment">всяка функция се изпълнява "в контекста" на обект</li>
-        <li class="fragment"><code>this</code> е референция към текущия обект</li>
+        <li class="fragment"><code class="javascript">this</code> е референция към текущия обект</li>
         <li class="fragment">една и съща функция може да се изпълни в контекста на различни обекти</li>
     </ul>
 </section>
@@ -174,4 +174,140 @@ var student = {
 
 student.avarage_grade //4.714285714285714
     </code></pre>
+</section>
+
+<section>
+    <h3>Private променливи/методи</h3>
+
+    <pre><code class="javascript">
+var Person = function(name, age) {
+    this.name = name;
+    this.age = age;
+};
+
+Person.prototype = (function () {
+    //very private
+    var grow_older = function (years) {
+        years = years || 1;
+        this.age += years;
+    }
+
+    return {
+        age_with: function (years) {
+            if(years &lt; 10) {
+                grow_older.call(this, years);
+            }
+        }
+    };
+})();
+    </code></pre>
+
+</section>
+
+<section>
+    <pre><code class="javascript">
+var p = new Person('Pencho', 23);
+
+p.age // 23
+
+p.age_with
+    </code></pre>
+
+</section>
+
+<section>
+    <h1>In-browser обекти</h1>
+</section>
+
+<section>
+    <h3>Глобален обект</h3>
+
+    <p>В браузъра глобалният this е Window обекта</p>
+    <pre><code class="javascript">
+this === window // true
+this === self // true
+    </code></pre>
+
+    <p>В node глобалният this е обектът global</p>
+    <pre><code class="javascript">
+this === global // true
+    </code></pre>
+</section>
+
+<section>
+    <h3>document</h3>
+
+    <p><code class="javascript">document</code> е обект, който представлява заредения в браузъра DOM</p>
+</section>
+
+<section>
+    <h3>Какво има в document</h3>
+    <ul>
+        <li><code class="javascript">document.querySelector/querySelectorAll</code></li>
+        <li><code class="javascript">document.createElement</code></li>
+        <li><code class="javascript">document.domain, document.baseURI</code></li>
+        <li><code class="javascript">document.cookie</code></li>
+        <li>...</li>
+    </ul>
+</section>
+
+<section>
+    <h3>Пример</h3>
+    <h4>динамично зареждане на скрип</h4>
+
+    <pre><code class="javascript">
+var script_tag = document.createElement('script');
+script_tag.type = 'text/javascript';
+script_tag.src = 'http://code.jquery.com/jquery-1.10.2.js';
+
+script_tag.onload = function () { console.log('jQuery loaded'); }
+
+var head_tag = document.querySelector('head');
+head_tag.appendChild(script_tag);
+    </code></pre>
+</section>
+
+<section>
+    <h3>Регулярни изрази</h3>
+    <pre class="fragment"><code class="javascript">
+/^Stancho/.test('Stancho is 45 years old'); //true
+    </code></pre>
+
+    <pre class="fragment"><code class="javascript">
+'Stancho is 45 years old'.match(/^(Stancho) is (\d+) years old/);
+// ['Stancho is 45 years old', 'Stancho', '45']
+    </code></pre>
+
+    <pre class="fragment"><code class="javascript">
+'Stancho is 45 years old'.match(/^([A-Z][a-z]+) is (\d+) years old/);
+// ['Stancho is 45 years old', 'Stancho', '45']
+    </code></pre>
+</section>
+
+<section>
+    <h3>RegExp</h3>
+
+    <p>Можем да дефинираме регулярни изрази с конструктура <code class="javascript">RegExp</code></p>
+
+    <pre class="fragment"><code class="javascript">
+var re = new RegExp('^(Stancho) is (\d+) years old');
+'Stancho is 45 years old'.match(re);
+// ['Stancho is 45 years old', 'Stancho', '45']
+    </code></pre>
+</section>
+
+<section>
+    <h3>Math</h3>
+
+    <p>Полезни функции и константи</p>
+    <ul>
+        <li class="fragment"><code class="javascript">Math.PI</code></li>
+        <li class="fragment"><code class="javascript">Math.E</code></li>
+        <li class="fragment"><code class="javascript">Math.ceil</code></li>
+        <li class="fragment"><code class="javascript">Math.floor</code></li>
+        <li class="fragment"><code class="javascript">Math.sin</code></li>
+        <li class="fragment"><code class="javascript">Math.cos</code></li>
+        <li class="fragment"><code class="javascript">...</code></li>
+        <p class="fragment"><strong>go forth and explore!</strong></p>
+    </ul>
 </section>
