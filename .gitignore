@@ -1,0 +1,4 @@
+.*.swp
+.*.swo
+lectures/
+node_modules/

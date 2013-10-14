@@ -1,0 +1,20 @@
+{
+  "name": "fmi-js",
+  "version": "0.0.1",
+  "author": "Evgeni Kunev <evgeni.kunev@gmail.com>",
+  "description": "slides",
+  "contributors": [
+    {
+      "name": "Gheorghi Penkov",
+      "email": "larodi@gmail.com"
+    },
+    {
+      "name": "Minko Gechev",
+      "email": "mgechev@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "coffee-script": "*",
+    "eco": "*"
+  }
+}
