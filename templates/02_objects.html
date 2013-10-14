@@ -1,0 +1,177 @@
+<section>
+    <h1>Обекти</h1>
+    <h3 class="fragment">(!== класове)</h3>
+</section>
+<section>
+    <h2><strong>Обектно</strong> ориентирано програмиране</h2>
+    <p>Обектно-ориентираното програмиране (ООП) е парадигма в компютърното програмиране, при която една програмна система се моделира като набор от обекти, които взаимодействат помежду си, за разлика от традиционното виждане, в което една програма е списък от инструкции, които компютърът изпълнява. Всеки обект е способен да получава съобщения, обработва данни и праща съобщения на други обекти.</p>(<a href="https://bg.wikipedia.org/wiki/Обекто-ориентирано–програмиране">wikipedia</a>)
+</section>
+
+<section>
+    <section>
+        <h2>Обикновено</h2>
+        <p>Дефинираме <b>клас</b>, в който описваме как очакваме да се държат обектите ни.</p>
+    </section>
+    <section>
+        <h2>Обаче</h2>
+        <p>Класовете не са задължителни, за да пишем <b>обектно ориентиран</b> код</p>
+    </section>
+</section>
+
+<section>
+    <h3>Литерални обекти</h3>
+    <pre class="fragment"><code class="javascript">
+var pesho = {name: 'Pesho', age: 24};
+    </code></pre>
+    <pre class="fragment"><code class="javascript">
+pesho.constructor; // [Function: Object]
+    </code></pre>
+    <pre class="fragment"><code class="javascript">
+var arr = [];
+a.constructor; // [Function: Array]
+    </code></pre>
+</section>
+
+<section>
+    <h3>JavaScript е прототипно базиран</h3>
+    <ul>
+        <li class="fragment">няма класове</li>
+        <li class="fragment">има конструктори</li>
+        <li class="fragment">всяка функция е конструктор</li>
+        <li class="fragment">всеки конструктур си има прототип</li>
+        <li class="fragment">всеки обект има конструктор</li>
+        <li class="fragment">респективно и прототип</li>
+    </ul>
+</section>
+
+<section>
+    <h3>Пример</h3>
+    <pre><code class="javascript">
+function Person (name, age) {
+    this.name = name;
+    this.age = age;
+}
+
+var p = new Person('Pencho', 20);
+
+
+console.log(p); //{ name: 'Pencho', age: 20 }
+
+console.log(Person.prototype); //{}
+p.constructor; //Person
+    </code></pre>
+</section>
+
+<section>
+    <h3>Методи</h3>
+    <pre><code class="javascript">
+Person.prototype.say_hi = function () {
+    console.log("Hello! My name is " + this.name);
+    console.log("I am " + this.age + "years old")
+}
+
+p.say_hi();
+//Hello! My name is Pencho
+//I am 20 years old
+    </code></pre>
+</section>
+
+<section>
+    <h3>this</h3>
+    <ul>
+        <li class="fragment">всяка функция се изпълнява "в контекста" на обект</li>
+        <li class="fragment"><code>this</code> е референция към текущия обект</li>
+        <li class="fragment">една и съща функция може да се изпълни в контекста на различни обекти</li>
+    </ul>
+</section>
+
+<section>
+    <h3>"безпризорна*" функция</h3>
+    <pre><code class="javascript">
+var capitalized_name = function() {
+    return this.name.toUpperCase();
+}
+
+p.capitalized_name = capitalized_name;
+p.capitalized_name(); //PENCHO
+    </code></pre>
+
+    <pre class="fragment"><code class="javascript">
+var s = new Person('Stancho', 25);
+s.capitalized_name; //undefined
+s.capitalized_name = capitalized_name;
+s.capitalized_name(); // STANCHO
+    </code></pre>
+
+    <pre class="fragment"><code class="javascript">
+s.capitalized_name === p.capitalized_name; //true
+    </code></pre>
+
+    <pre class="fragment"><code class="javascript">
+Person.prototype.capitalized_name; //undefined
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="javascript">
+Person.prototype.grow_older = function (years) {
+    years |= 1;
+    this.age += years;
+}
+
+p.age // 20
+p.grow_older();
+p.age // 21
+    </code></pre>
+</section>
+
+<section>
+    <h3>Getters & Setters</h3>
+    <pre class="fragment"><code class="javascript">
+Person.prototype.__defineGetter__('full_info', function () {
+    return this.name + ' is ' + this.age + ' years old';
+});
+    </code></pre>
+
+    <pre class="fragment"><code class="javascript">
+Person.prototype.__defineSetter__('full_info', function (value) {
+   var match = value.match(/(\w+) is (\d+) years old/);
+   this.name = match[1];
+   this.age = parseInt(match[2]);
+});
+    </code></pre>
+</section>
+
+<section>
+    <h3>Getters & Setters</h3>
+
+    <pre><code class="javascript">
+p.full_info // 'Pencho is 21 years old'
+    </code></pre>
+
+    <pre class="fragment"><code class="javascript">
+p.full_info = 'Stancho is 35 years old.';
+p.full_info // 'Stancho is 35 years old'
+console.log(p); // { name: 'Stancho', age: 35 }
+    </code></pre>
+
+</section>
+
+<section>
+    <h3>Мутатори в литерални обекти</h3>
+
+    <pre><code class="javascript">
+var student = {
+    name: 'larodi',
+    faculty_number: 06660,
+    grades: [5, 5, 4, 6, 6, 4, 3],
+    get avarage_grade() {
+        return this.grades.reduce(function (a, b) {
+            return a + b;
+        })/this.grades.length;
+    }
+};
+
+student.avarage_grade //4.714285714285714
+    </code></pre>
+</section>

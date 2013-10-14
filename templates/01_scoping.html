@@ -1,0 +1,205 @@
+    <section>
+        <h2>Variable scope</h2>
+        <ul class="build">
+          <li>Local variables</li>
+          <li>Global variables</li>
+          <li>Instance variables</li>
+        </ul>
+    </section>
+
+    <section>
+      <h3>Local variables (1)</h3>
+      <p>The declaration of local variables is processed with the keyword var</p>
+      <p>All variables declared in the global namespace (i.e. not declared in any function) are becomming properties of window.</p>
+      <pre>
+      var foo = 'foo';
+      console.log(window.foo);
+      console.log(window['foo']);
+      function localScope() {
+        var bar = 'bar';
+        console.log(foo, window['foo']); //foo
+      }
+      console.log(bar); //undefined
+      </pre>
+    </section>
+
+    <section>
+      <h3>Local variables (2)</h3>
+      <p>Important fact is that the variables have functional scope - not block scope!</p>
+      <p>Same applies for other flow control operators (if, do while, while, switch).</p>
+      <pre>
+        function foo() {
+          for (var i = 0; i &lt; 3; i += 1) {}
+          console.log(i); //3
+        }
+        foo();
+        console.log(i); //undefined
+      </pre>
+    </section>
+
+    <section>
+      <h3>Local variables (3)</h3>
+      <p>Do not omit the var keyword, because the variable will be decalred as global.</p>
+      <pre>
+        function foo() {
+          for (i = 0; i &lt; 3; i += 1) {}
+          console.log(i); //3
+        }
+        foo();
+        console.log(i); //3
+      </pre>
+    </section>
+
+    <section>
+      <h3>Local variables (4)</h3>
+      <p>ES6 gives us <strong>let</strong>. let allows us to declare local variables to given block (similar to languages like Java, C#, C++).</p>
+      <p>Currently is not supported by any of the major browsers.</p>
+      <pre>
+        function foo() {
+          for (let i = 0; i &lt; 3; i += 1) {
+            //something here
+          }
+          console.log(i); //undefined
+        }
+      </pre>
+    </section>
+
+    <section>
+      <h3>Global variables</h3>
+      <pre>
+      foo = new Object();
+      window['foo'] === foo //true
+      window.foo === foo //true
+      function bar() {
+        baz = 'baz';
+      }
+      bar();
+      window.baz //'baz'
+      </pre>
+    </section>
+
+    <section>
+      <h2>Instance variables</h2>
+      <p>Attached to the current context</p>
+      <pre>
+
+        window === this //true
+      </pre>
+    </section>
+
+    <section>
+      <h3>Context (1)</h3>
+      <p>The context is associated with specific object inside the function body and window if we are not in a function.</p>
+      <p>If we call method of given nested object the context of the method will be the object just before the last ".".</p>
+      <p>Using different techniques we can change the context of the functions.</p>
+    </section>
+
+    <section>
+      <h3>Context (2)</h3>
+      <pre>
+        var obj = {
+          bar: {
+            baz: function () { return this; }
+          },
+          foo: function () { return this }
+        };
+
+        function foobar() { return this; }
+
+        foobar() === window
+        obj.foo() === obj
+        obj.bar.baz() === ?
+
+      </pre>
+    </section>
+
+    <section>
+      <h3>Changing the context (1)</h3>
+      <ul class="build">
+        <li>Using new</li>
+        <li>Using call/apply</li>
+        <li>Using bind</li>
+      </ul>
+    </section>
+
+    <section>
+      <h3>Changing the context (2)</h3>
+      <p>When new is called the function's context is newly created object. It will be result of the function called with new.
+      You can attach different properties and methods to "this".
+      </p>
+      <pre>
+        var temp;
+        function foo() {
+          console.log(this === window); //false
+          temp = this;
+        }
+        new foo === temp;
+      </pre>
+    </section>
+
+    <section>
+      <h3>Changing the context (3)</h3>
+      <p>Using the function's methods call and apply you can call a function with specific context:</p>
+      <pre>
+        function baz() {
+          console.log(this, arguments);
+        }
+        baz.call({ foo: 'baz' }, 1,2,3);
+        baz.apply({ foo: 'baz' }, [1,2,3]);
+      </pre>
+    </section>
+
+    <section>
+      <h3>Changing the context (4)</h3>
+      <p>Using the functions method bind you can change the context of given function.
+        When bind is called with speicified context new function is returned. The context of the newly created function cannot be changed.</p>
+        <pre>
+          function foo() {
+            console.log(this);
+          }
+          foo.bind({});
+        </pre>
+    </section>
+
+    <section>
+      <h3>Schönfinkeling (Currying)</h3>
+      <p>Functional transformation. It is commonly used in languages like Haskell.</p>
+      <p>It allows to call function accepting multiple arguments with just few of them. The result of the partial application is new function
+        which accepts the rest arguments (ones which are still not filled).</p>
+      <pre>
+        function foo(a, b) {
+          return a + b;
+        }
+        var res = foo.bind(null, 1);
+        res(2); //3
+      </pre>
+    </section>
+
+    <section>
+      <h3>Comparison</h3>
+      <pre>
+        var o1 = new Object(),
+            o2 = new Object();
+        o1 === o2 //false
+        o1 == o2 //false
+        o1 &lt; o2 //false
+        o1 &gt; o2 //false
+        o1 &lt;= o2 //true
+        o1 &gt;= o2 //true
+      </pre>
+      <p>This happens because &lt; and &gt; cast their operands to strings implicity.</p>
+    </section>
+
+    <section>
+      <h3>Comparison</h3>
+      <pre>
+        var str = 'baz';
+        str instanceof String //false
+        typeof str === 'string' //true
+        var str2 = new String('baz');
+        str == str2 //true
+        str === str2 //false
+      </pre>
+      <p>This is result of comparison of reference and primitive types. Better use primitive strings.</p>
+    </section>
+
