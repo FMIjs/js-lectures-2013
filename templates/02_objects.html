@@ -128,16 +128,20 @@ p.age // 21
 <section>
     <h3>Getters & Setters</h3>
     <pre class="fragment"><code class="javascript">
-Person.prototype.__defineGetter__('full_info', function () {
-    return this.name + ' is ' + this.age + ' years old';
+Object.defineProperty(Person.prototype, 'full_info', {
+    get: function () {
+        return this.name + ' is ' + this.age + ' years old';
+    }
 });
     </code></pre>
 
     <pre class="fragment"><code class="javascript">
-Person.prototype.__defineSetter__('full_info', function (value) {
-   var match = value.match(/(\w+) is (\d+) years old/);
-   this.name = match[1];
-   this.age = parseInt(match[2]);
+Object.defineProperty(Person.prototype, 'full_info', {
+    get: function (value) {
+        var match = value.match(/(\w+) is (\d+) years old/);
+        this.name = match[1];
+        this.age = parseInt(match[2]);
+    }
 });
     </code></pre>
 </section>
