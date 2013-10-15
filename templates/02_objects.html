@@ -127,29 +127,39 @@ p.age // 21
 
 <section>
     <h3>Getters & Setters</h3>
+    <strong>DEPRECATED!</strong>
     <pre class="fragment"><code class="javascript">
-Object.defineProperty(Person.prototype, 'full_info', {
-    get: function () {
-        return this.name + ' is ' + this.age + ' years old';
-    }
+Person.prototype.__defineGetter__('full_info', function () {
+    return this.name + ' is ' + this.age + ' years old';
 });
     </code></pre>
 
+    <strong>DEPRECATED!</strong>
     <pre class="fragment"><code class="javascript">
+Person.prototype.__defineSetter__('full_info', function (value) {
+   var match = value.match(/(\w+) is (\d+) years old/);
+   this.name = match[1];
+   this.age = parseInt(match[2]);
+});
+    </code></pre>
+</section>
+<section>
+    <h3>Getters & Setters</h3>
+    <strong>Current standard</strong>
+    <pre><code class="javascript">
 Object.defineProperty(Person.prototype, 'full_info', {
-    get: function (value) {
+    get: function () {
+        return this.name + ' is ' + this.age + ' years old';
+    },
+    set: function (value) {
         var match = value.match(/(\w+) is (\d+) years old/);
         this.name = match[1];
         this.age = parseInt(match[2]);
     }
 });
     </code></pre>
-</section>
 
-<section>
-    <h3>Getters & Setters</h3>
-
-    <pre><code class="javascript">
+    <pre class="fragment"><code class="javascript">
 p.full_info // 'Pencho is 21 years old'
     </code></pre>
 
