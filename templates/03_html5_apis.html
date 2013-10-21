@@ -1,0 +1,312 @@
+<section>
+    <h1>Client-side javascript</h1>
+</section>
+
+<section>
+    <h2>Цели?</h2>
+    <ul>
+        <li class="fragment">логика в клиента</li>
+        <li class="fragment">валидация</li>
+        <li class="fragment">по-малко работа за сървъра</li>
+        <li id="oh-shiny" class="fragment"><big>OH! Shiny!!!</big></li>
+
+        <script type="text/javascript">
+            var list_item = document.getElementById('oh-shiny');
+            list_item.onmouseover = function () {
+                this.style.top = '25px';
+                if (this.style.color == 'red') {
+                    this.style.color = 'green';
+                } else {
+                    this.style.color = 'red';
+                }
+            };
+        </script>
+    </ul>
+</section>
+
+<section>
+    <h2>Ядове</h2>
+
+    <ul>
+        <li class="fragment">не знаем колко изчислителна мощ има клиента</li>
+        <li class="fragment">не е много възпитано да му поставяме ограничения</li>
+        <li class="fragment">не знаем на какъв browser ще се изпълнява кода</li>
+        <li class="fragment">счита се за невъзпитано да кажем, че ползване на <small>(старо)</small>IE е невъзпитано</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Винаги има</h2>
+
+    <ul>
+        <li class="fragment">обекти</li>
+        <li class="fragment">конструктури</li>
+        <li class="fragment">прототипи</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Pollyfil</h2>
+
+    <p>Неща, които може да очаквате да липсват в някой браузър, можете да допълните сами при необходимост.</p>
+
+    <pre class="fragment"><code class="javascript">
+if (typeof Array.prototype.forEach === 'undefined') {
+    Array.prototype.forEach = function (func) {
+        var i;
+        for(i = 0; i &lt; this.length; ++i) {
+            func(this[i]);
+        }
+    };
+}
+    </code></pre>
+    <p class="fragment">Заплахи за физическа саморазправа, които динамично да се добавят в DOM-а при горните условия често биват считани за <strong>неуместни</strong></p>
+</section>
+
+<section>
+    <h2>Table of compatibility</h2>
+
+    <ul>
+        <li><a href="http://kangax.github.io/es5-compat-table/#">ES5</a></li>
+        <li><a href="http://kangax.github.io/es5-compat-table/es6">ES6</a></li>
+    </ul>
+
+    <aside class="notes">
+        Всички съвременни браузъри(вкл. IE10/11) са напълно ES5 съвместими.
+        Спокойно можете да пишете "готин" js, ако сте готови да жертвате клиентите на IE върху XP.
+    </aside>
+</section>
+<section>
+    <h3>Някои HTML5 благини</h3>
+
+    <ul>
+        <li class="fragment">event listeners</li>
+        <li class="fragment">localStorage</li>
+        <li class="fragment">Worker</li>
+    </ul>
+</section>
+
+<section>
+    <h3>Event listeners</h3>
+
+    <p>Архитектурата на езика е <em>събитийна</em>. Основно защото е създаден с цел да се "скриптира" поведението на браузъра.</p>
+
+    <p>В самото начало основно с цел да се реагира по някакъв начин на <em>определени действия на потребителя</em>, без това да изисква повторни заявки към сървъра.</p>
+</section>
+
+<section>
+    <h3><code>this.on<em>smth</em> = </code></h3>
+    <pre><code class="javascript">
+document.querySelector('button#press-me').onclick = function () {
+    console.log('you pressed it!');
+};
+    </code></pre>
+</section>
+
+<section>
+    <h2>Има много такива</h2>
+
+    <ul>
+        <li class="fragment">onmouseover</li>
+        <li class="fragment">onkeydown</li>
+        <li class="fragment">onkeyup</li>
+        <li class="fragment">onfocus</li>
+        <li class="fragment">onblur</li>
+        <li class="fragment">...</li>
+    </ul>
+</section>
+
+<section>
+    <h3>addEventListener</h3>
+
+    <pre><code>target.addEventListener(type, listener[, useCapture]);</code></pre>
+
+    <ul>
+        <li class="fragment"><strong><code>type</code></strong> - За какво събитие искаме да добавим "обработчик"</li>
+        <li class="fragment"><strong><code>listener</code></strong> - Функцията, която искаме да се изпълни при настъпване на събитието</li>
+        <li class="fragment"><strong><code>useCapture</code></strong> - изпълнение при capture фазата на събитието(wat?)</li>
+    </ul>
+</section>
+
+<section>
+    <h3>Фази на събитията</h3>
+    <h5>event propagation</h5>
+
+    <ul>
+        <li class="fragment">capture</li>
+        <li class="fragment">bubble</li>
+    </ul>
+</section>
+
+<section>
+    <div>
+        <img src="http://www.w3.org/TR/DOM-Level-3-Events/images/eventflow.png" alt="w3c event model" />
+    </div>
+    <a href="http://www.w3.org/TR/DOM-Level-3-Events/">source</a>
+</section>
+
+<section>
+    <h3>Събитието</h3>
+
+    <ul>
+        <li>"преминава" "надолу" по DOM йерархията(capture phase)</li>
+        <li>достигна крайната си цел(target елемента)</li>
+        <li>тръгва обратно "нагоре" по DOM йерархията(bubbling phase)</li>
+    </ul>
+</section>
+
+<section>
+    <h3>Ред на изпълнение</h3>
+    
+    <ol>
+        <li class="fragment">
+            <span>capture фазата</span>
+            <ol>
+                <li class="fragment">window</li>
+                <li class="fragment">document</li>
+                <li class="fragment">...</li>
+                <li class="fragment">target</li>
+            </ol>
+        </li>
+        <li class="fragment">
+            <span>bubbling фаза</span>
+            <ol>
+                <li class="li fragment">target</li>
+                <li class="li fragment">target.parentNode</li>
+                <li class="li fragment">...</li>
+                <li class="li fragment">window</li>
+            </ol>
+        </li>
+    </ol>
+</section>
+
+<section>
+    <h3>Ред на изпълнение</h3>
+
+    <span>Редът на изпълнение на функциите, обработващи едно събитие винаги следва редът на елементите</span>
+    <ul>
+        <li>от window надолу по DOM йерархията до target лемента в <strong>capture фазата</strong>.</li>
+        <li>от target елемента нагоре по DOM йерархията до window в <strong>bubbling фазата</strong>.</li>
+    </ul>
+</section>
+
+<section>
+    <h1>Демо</h1>
+    (<a href="https://github.com/FMIjs/js-examples/blob/master/example_events.html" target="_blank">click</a>)
+</section>
+
+<section>
+    <h3>local storage</h3>
+
+    <p>Прост начин за запазване на потребителска информация<p>
+
+    <ul>
+        <li class="fragment">може да се създава и ползва offline</li>
+        <li class="fragment">самосотоятелен за отделни домейни</li>
+        <li class="fragment"><code>localStorage</code> е достъпен като съвсем обикновен обект</li>
+        <li class="fragment">не изисква трафик за разлика от "бисквитки"</li>
+    </ul>
+</section>
+
+<section>
+    <pre><code class="javascript">
+localStorage.current_user = 'pencho';
+window.location.reload();
+    </code></pre>
+
+    <pre><code class="javascript">
+console.log(localStorage.pencho); // pencho
+    </code></pre>
+</section>
+
+<section>
+    <h1>Achtung!</h1>
+
+    <p>Макар, че такива прлблеми възникват рядко в практиката, localStorage може да доведе до race condition.</p>
+    <dl>
+        <dt class="fragment">Race condition в <strong>еднонишков</strong> процес?</dt>
+        <dd class="fragment">
+            <p>Всъщност да(защото не е чак толква еднонишков)</p>
+            <ul>
+                <li class="fragment">няколко инстанции на един browser</li>
+                <li class="fragment">process per tab</li>
+                <li class="fragment">Worker</li>
+            </ul>
+        </dd>
+    </dl>
+
+    <aside class="notes">
+        Обикновено javascript кода е еднонишков.
+        Поради това много хора смятат, че той може да бъде <strong>само</strong> еднонишков.
+    </aside>
+</section>
+
+<section>
+    <h1>Демо</h1>
+    (<a href="https://github.com/FMIjs/js-examples/blob/master/example_localStorage.html" target="_blank">click</a>)
+</section>
+
+<section>
+    <h1>Worker</h1>
+    <h4>(HTML5 Candidate Recommendation 01 May 2012)</h4>
+
+    <p>Понякога имаме нужда да изпълняваме <em>тежки</em> изчисления, които няма как да се случват в основната(UI) нишка, в които браузърът изпълнява нашия код</p>
+</section>
+
+<section>
+    <h1>Actors</h1>
+
+    <p>Actor моделът е подход към паралелното програмиране, в който отделни нишки/процеси си комуникират само със съобщения, а не чрез споделени ресурси</p>
+    <p>Реализацията в крайна сметка почива на обикновени thread-ове, но много проблеми свързани с тях са заобиколени, чрез абстракцията за съобщения, вместо споделени променливи</p>
+</section>
+
+<section>
+    <h3>Worker-ите(CR от 03 May 2012) са пример за реализация на actor model</h3>
+</section>
+
+<section>
+    <p>Създаваме нов worker, който зарежда my_worker.js</p>
+    <pre><code class="javascript">
+        var worker = new Worker('my_worker.js');
+    </code></pre>
+    <p>Указваме функция, която да се изпълни, когато worker нишката изпрати съобщение към главната нишка</p>
+    <pre><code class="javascript">
+        worker.addEventListener('message', function(evt) {
+            var data = evt.data;
+            console.log('received "' + data + '" from the worker thread');
+        });
+    </code></pre>
+</section>
+
+<section>
+    <ul>
+        <li>В my_worker.js <code>self</code> е референция към текущия worker обект, в който се изпълнява кода</li>
+        <li><code>self</code> в my_worker.js <strong>не е</strong> същия обект, който реферира <code>worker</code> в основната нишка</li>
+        <li>С методът <code>postMessage</code> можем да изпращаме съобщения към/от worker-а</li>
+    </ul>
+
+    <hr />
+
+    <pre><code class="javascript">
+        worker.postMessage({
+            command: 'start', 
+            data: 'initial data'
+        });
+    </code></pre>
+    <pre><code class="javascript">
+        self.postMessage('Started work on ' + data)
+    </code></pre>
+</section>
+
+<section>
+    <p>При изпращане на съобщение обектът се <strong>копира</strong></p>
+
+    <p>За много големи обекти това може да отнеме време</p>
+
+    <p>Съшествуват решения за това(Trasnferable objects)</p>
+</section>
+
+<section>
+    <h1>Демо</h1>
+    (<a href="https://github.com/FMIjs/js-examples/tree/master/workers" target="_blank">click</a>)
+</section>
