@@ -1,0 +1,968 @@
+<section>
+    <h1>jQuery</h1>
+</section>
+
+<section>
+    <h2>Съдържание</h2>
+    <ul>
+        <li>Какво е jQuery?</li>
+        <li>Защо jQuery?</li>    
+        <li>Какво е $?</li>
+        <li>Селектори</li>
+        <li>DOM</li>
+        <li>Събития</li>
+        <li>Ajax</li>
+        <li>Ефекти</li>
+        <li>Deferred</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Какво е jQuery</h2>
+    <ul>
+        <li>cross-browser JavaScript библиотека</li>
+        <li>набор от инструменти, които създават абстракция над стандартния API, който предлагат браузърите и ни</li>
+        <li>browser independancy</li>
+        <li>Освен с невъвместимостите между различните браузъри, jQuery ни предоставя лесен и удобен за използване internal DSL за работа с client-side JavaScript.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Защо jQuery?</h2>
+    <ul>
+        <li>Малък размер (32KB, до 10KB при custom build)</li>
+        <li>Cross-browser</li>
+        <li>Лесна манипулация на DOM</li>
+        <li>По-компактен код</li>
+        <li>Голямо community</li>
+        <li>Лесен за използване</li>
+        <li>Добре документиран</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Какво е $? (1)</h2>
+    <pre>
+        <code class="javascript">
+            $ == jQuery //true
+            $ === jQuery //true
+            $ instanceof Object //true
+            $ instanceof Function //true
+            typeof $ === 'function' //true
+        </code>
+    </pre>
+</section>
+
+<section>
+    <h2>Какво е $? (2)</h2>
+    <div class="fragment">
+        <p>2 глобални променливи </p>
+        <ul>
+            <li><code class="javascript">$</code></li>
+            <li><code class="javascript">jQuery</code></li>
+        </ul>
+    </div>
+
+    <div class="fragment">
+        <p>Разни "статични методи"</p>
+        <ul>
+            <li><code class="javascript">$.param</code></li>
+            <li><code class="javascript">$.map</code></li>
+            <li><code class="javascript">$.filter</code></li>
+            <li><code class="javascript">$.ajax</code></li>
+            <li>...</li>
+        </ul>
+    </div>
+
+    <div class="fragment">
+        <p>може да бъде използван и като функция</p>
+        <pre><code class="javascript">($('.form input[type="text"]'))</code></pre>
+    </div>
+</section>
+
+<section>
+    <h2>Utilities</h2>
+    <p><code>filter</code>, <code>map</code>, <code>forEach</code> и мн. други: <span class="fragment" style="color: red;">липсват преди ES5 :(</span></p>
+</section>
+<section>
+    <p>Но jQuery ни ги предоставя като "статични методи" на $</p>
+    <ul>
+        <li><code>$.map(array, callback(element, index))</code></li>
+        <li><code>$.grep(array, predicate(element, index)[, invert])</code></li>
+        <li><code>$.each(collection, callback(index, element))</code>(!?)</li>
+        <li><code>$.inArray(value, array[, fromIndex])</code></li>
+        <li><code>$.isArray(obj)</code></li>
+        <li><code>$.extend(target[, object1[, object2[...]]])</code></li>
+        <li><code>$.trim(str)</code></li>
+        <li><a href="http://api.jquery.com/category/utilities/">И други...</a></li>
+    </ul>
+</section>
+
+<section>
+    <h2>Селектори (1)</h2>
+    <p>Можем да достъпваме елементите в DOM дървото(подобно на document.querySelector/querySelectorAll)</p>
+    <p><strong>CSS селектори(досадни понякога) &lt;&lt; <a href="http://sizzlejs.com/">Sizzle</a></strong></p>
+</section>
+
+<section>
+    <h2>Селектори (2)</h2>
+    <div>
+        <ul>
+            <li><code>$(DOM_ELEMENT)</code> - създава wrapper на даден DOM елемент</li>
+            <li><code>$('tagname')</code> - избира всички &lt;<em>tag</em>&gt; елементи</li>
+            <li><code>$('#id')</code> - избира елемент(<em>ите</em>) дадено id(<strong>NB!</strong>)</li>
+            <li><code>$('.className')</code> - избира елементи с дадения клас</li>
+            <li><code>$('[attribute=value]')</code> - избира елементи по атрибут</li>
+            <li><code>$('parent &gt; child')</code> - избира децата на даден родител</li>
+        </ul>
+    </div>
+</section>
+
+<section>
+    <h2>Селектори (3)</h2>
+    <div>
+        <ul>
+            <li><code>$(':contains("text")')</code> - избира , които съдържат даден подниз.</li>
+            <li><code>$(':button')</code> - избира всички бутони.</li>
+            <li><code>$(':image')</code> - избира всички картинки.</li>
+            <li>...</li>
+        </ul>
+    </div>
+    <p>
+        Всички споменати селектори могат да се комбинират. В случай, че резултатното множество от селектирани елементи съдържа повече от един елемент
+        се връща масив от елементите.
+    </p>
+    <a href="http://api.jquery.com/category/selectors/">MOAR</a>
+</section>
+
+<section>
+    <h2>Селектори (4)</h2>
+    Няколко примера за използване на $ с DOM елемент.
+    <pre>
+        <code class="javascript">
+            $(document.getElementById('input')).remove();
+            $(document.querySelector('#inpit')).empty();
+        </code>
+    </pre>
+    <p>* В примерите експлицитното извикване на <code>document.getElementById</code> и <code>document.jquerySelector</code> е напълно излишно Sizzle автоматично ще извика <code>document.getElementById</code> вътрешно, при използване на <code>$('#input')</code>.  </p>
+    <p> Използването на $ с DOM елемент е полезно когато имаме референция към даден DOM елемент и искаме върху него да приложим някой от методите, които ни предлага jQuery.  </p>
+</section>
+
+<section>
+    <h2>Селектори (5)</h2>
+    <p>
+        В случай, че сме получили масив от елементи посредством "chaining" можем да приложим дадена функция върху всички:
+        <pre><code>
+            $('div').grep(function (idx, el) {
+              return !!(idx % 2);
+            }).each(function (idx, el) {
+              $(el).css('background-color', 'red');
+            });
+        </code></pre>
+        Методът <code>each</code> може да бъде разгледан като функция от по-висок ред. 
+        Кодът в примера ще зададе червен цвят на фона на всеки втори <code>div</code> елемент.
+    </p>
+</section>
+
+<section>
+    <h2>Селектори (6)</h2>
+    <p>
+        HTML псевдо елементи не могат да се селектират.
+        Единствено тяхното съдържание може да бъде променяно чрез "tricky" метод, който ще разгледаме по-късно.
+    </p>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (1)</h2>
+    <h3>Създаване на DOM елементи</h3>
+    Посредством функцията $ могат да бъдат създавани нови DOM елементи. Подобно на употребата на $ за селектиране на елементи подаваме низ,
+    който обаче трябва да бъде валиден HTML:
+    <pre><code>
+$('&lt;div&gt;Hello world!&lt;/div&gt;');
+    </code></pre>
+    Кодът по-горе ще извика: <code>document.createElement('div').innerHTML = 'Hello world';</code>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (2)</h2>
+    За разлика от <code>document.createElement</code>, $ може да бъде извикван и с HTML със сложна структура:
+    <pre><code>
+var tree_segment = $("&lt;div&gt;
+    &lt;ul&gt;
+        &lt;li&gt;
+            &lt;span class="something"&gt;Foo&lt;/span&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;div&gt;Bar&lt;/div&gt;&lt;/li&gt;
+            &lt;li&gt;Baz&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;");
+    </code></pre>
+    В този случай, се генерира поредица от <code>document.createElement</code> извиквания за всеки бъдещ DOM елемент.
+</section>
+
+<section>
+    <h2>Манипулации на DOM (3)</h2>
+    <h3>Добавяне на елемент</h3>
+    <ul>
+        <li><code>$(child).appendTo(parent);</code> - Добавя дъщерен DOM елемент като последен в даден родителски</li>
+        <li><code>$(parent).append(child);</code> - Добавя дъщерен DOM елемент като последен в даден родителски</li>
+        <li><code>$(parent).prepend(child);</code> - Добавя дъщерен DOM елемент като първи в даден родителски</li></li>
+        <li><code>$(child1).insertAfter(child2);</code> - Добавя child1 преди child2</li></li>
+        <li><code>$(child1).insertBefore(child2);</code> - Добавя child1 след child2</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Манипулации на DOM (4)</h2>
+        <ul>            
+            <li><code>$(child2).after(child1);</code> - Добавя child2 след child1</li>
+            <li><code>$(child2).before(child1);</code> - Добавя child2 преди child1</li>
+            <li><code>$(child).wrap(parent)</code> - "Опакова" структура от всички селектирани елемент с parent</li>
+            <li><code>$(selector).wrapInner(wrapper)</code> - "Опакова" HTML структура представляваща съдържанието на всеки елемент от списъка селектирани елементи</li>
+            <li><code>$(selector).wrapAll(wrapper)</code> - "Опакова" HTML структурата около всички елементи представляващи списъка от селектирани елементи</li>
+        </ul>
+    * Забележка в случай, че като аргумент е използван списък от елементи или селектор, който селектира множество елементи, то операциите се прилагат към всички.
+</section>
+
+<section>
+    <h2>Манипулация на DOM (5)</h2>
+    <h3>wrap vs wrapAll</h3>
+    <pre><code>&lt;div class="elem"&gt;&lt;/div&gt;
+&lt;div class="elem"&gt;&lt;/div&gt;</code></pre>
+</section>
+<section>
+    wrap
+    <pre><code>
+&lt;script&gt;
+    $('.elem').wrap('&lt;div class="parent"&gt;&lt;/div&gt;');
+&lt;/script&gt;
+//Result
+&lt;div class="parent"&gt;
+    &lt;div class="elem"&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class="parent"&gt;
+    &lt;div class="elem"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</section>
+<section>
+    wrapAll
+    <pre><code>
+&lt;script&gt;
+    $('.elem').wrapAll('&lt;div class="parent"&gt;&lt;/div&gt;');
+&lt;/script&gt;
+//Result
+&lt;div class="parent"&gt;
+    &lt;div class="elem"&gt;&lt;/div&gt;
+    &lt;div class="elem"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (6)</h2>
+    <h3>Премахване елементи</h3>
+    <ul>
+        <li><code>$(child).empty();</code> - Премахва всички дъщерни DOM елементи от даден родителски елемент.</li>
+        <li><code>$(child).remove();</code> - Изтрива даден DOM елемент и цялата информация, която jQuery е асоциирала към него.</li>
+        <li><code>$(child).detach();</code> - Изтрива даден DOM елемент от DOM дървото, но запазва информацията, която jQuery е асоциирала към него.</li>
+        <li><code>$(child).unwrap();</code> - Изтрива родителският елемент на даден дъщерен, като оставя дъщерният непроменен.</li>
+    </ul>
+    * Забележка в случай, че като аргумент е използван списък от елементи или селектор, който селектира множество елементи, то операциите се прилагат към всички.
+</section>
+
+<section>
+    <h2>Манипулация на DOM (7)</h2>
+    <p>Когато бъде извикан методът <code>document.createElement</code>, новосъздаденият елемент все още не е част от DOM дървото.</p>
+    <p>Това означава, че дори да бъде изрично зададен даден клас на елемента, то стиловете от него няма да бъдат приложени.</p>
+    <pre>
+        <code>
+&lt;style&gt;
+    .red {
+        background-color: red;
+    }
+&lt;/style&gt;
+&lt;script&gt;
+    //...
+    var elem = $('&lt;div class="red"&gt;&lt;/div&gt;');
+    console.log(elem.css('background-color')); //''
+    $(document.body).append(elem);
+    console.log(elem.css('background-color')); //'rgb(255, 0, 0)'
+&lt;/script&gt;
+        </code>
+    </pre>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (8)</h2>
+    Можем да добавяме нови елементи към вече създадени такива дори преди да са добавени в DOM дървото:
+    <pre>
+        <code>
+var elem = $('&lt;div&gt;foo&lt;/div&gt;').append('&lt;span&gt;bar&lt;/span&gt;');
+$(document.body).append(elem);
+        </code>
+    </pre>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (9)</h2>
+    Както виждате методите предлагащи изтриване и добавяне на DOM елементи предоставят по-удобен начин за работа.
+    Например добавянето на един елемент, последвано от неговото изтриване със стандартните средства на DOM:
+    <pre><code>
+var div = document.createElement('div');
+document.body.appendChild(div);
+div.parentNode.removeChild(div);
+    </code></pre>
+    Докато с jQuery:
+    <pre><code>
+$('&lt;div/&gt;').appendTo(document.body).remove();
+    </code></pre>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (10)</h2>
+    Замяна на елементи:
+    <ul>
+        <li><code>$(selector).replaceWith(elem)</code> - Заменя всички селектирани елементи с посочените, като аргумент на <code>replaceWith</code></li>
+        <li><code>$(elem).replaceAll(selector)</code> - Заменя всички елементи, които съвпадат с аргумента на <code>replaceAll</code> с <code>elem</code>.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (11)</h2>
+    <ul>
+        <li><code>$(selector).html(htmlContent)</code> - Кратък начин за задаване на съдържанието на даден DOM елемент (алтернатива на <code>innerHTML</code>).</li>
+        <li><code>$(selector).html()</code> - Връща съдържаните DOM елементи на първият селектиран елемент в HTML формат.</li>
+        <li><code>$(selector).attr(key, value)</code> - Задава стойност <code>value</code> на атрибута <code>key</code>. В случай, че селекторът е селектирал повече от един елемент то стойността на атрибута <code>key</code> на всички селектирани елементи придобива стойност <code>value</code>.</li>
+        <li><code>$(selector).attr(key)</code> - Връща стойността на атрибута <code>key</code> на първият елемент от списъкът селектирани елементи.</li>
+        <li><code>$(selector).text(textValue)</code> - Задава текстовото съдържание на всички елементи от списъкът селектирани елементи.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (12)</h2>
+    <ul>        
+        <li><code>$(selector).text()</code> - Връща текстовото съдържание на първият елемент от колекцията и неговите наследници.</li>
+        <li><code>$(selector).prop(key, value)</code> - Задава стойност <code>value</code> на полето <code>key</code> на всички елементи от списъкът селектирани елементи.</li>
+        <li><code>$(selector).prop(key)</code> - Връща стойността на полето <code>key</code> на първият елемент от списъкът селектирани елементи.</li>
+        <li><code>$(selector).val(value)</code> - Задава стойност <code>value</code> на всички елементи от списъкът селектирани елементи.</li>
+        <li><code>$(selector).val()</code> - Връща стойността на първият елемент от списъкът селектирани елементи.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (13)</h2>
+    <h3>prop vs attr</h3>
+    <code>attr</code> се използва единствено за атрибути (cols, rols, type, for...), , докато <code>prop</code> за свойства на дадените елементи (disabled, checked,...).
+    <pre><code>
+&lt;input type="checkbox" checked="checked" /&gt;
+&lt;script&gt;
+    console.log($('input').attr('checked'));    //checked
+    console.log($('input').prop('checked'));    //true
+&lt;/script&gt;
+    </code></pre>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (14)</h2>
+    <h3>text vs val</h3>
+    <code>val</code> се използва за задаване/извличане на стойността на различни контроли (select, text input, textarea).
+    <code>text</code> се използва за задаване на текстовата стойност на даден елемент, не е нужно той да бъде контрола. Не е добра практика за input елемент да се задава стойност, чрез text, въпреки, че в някои случаи това е възможно (textarea).
+    <pre><code>
+&lt;input type="text" /&gt;
+&lt;span&gt;&lt;/span&gt;
+&lt;script&gt;
+    $('input').val('foo');
+    $('span').text('bar');
+&lt;/script&gt;
+    </code></pre>
+</section>
+
+<section>
+    <section>
+    <h2>Манипулация на DOM (15)</h2>
+    Задаването на стилове на елементите се осъществява посредством задаване на различни свойства на полетата на обекта <code>style</code>:
+    <pre><code> document.querySelector('#div').style.borderColor = '#ffcc11';</code></pre>
+    </section>
+    <section>
+    <h2>Манипулация на DOM (15)</h2>
+    jQuery предлага методът <code>css</code>. Той дава възможност за задаване на няколко стила с едно негово извикване:
+    <pre><code>
+$('#elem').css({
+    borderColor: '#ffcc11',
+    color: 'red',
+    '-webkit-transform': 'rotate(30deg)',
+    '-moz-transform': 'rotate(30deg)',
+    '-o-transform': 'rotate(30deg)',
+    '-ms-transform': 'rotate(30deg)',
+    transform: 'rotate(30deg)'
+});
+    </code></pre>
+    </section>
+    <section>
+    <h2>Манипулация на DOM (15)</h2>
+    Имената на полетата на обектът литерал, подаден като аргумент могат да бъдат зададени чрез имената на CSS свойствата или техните JavaScript алтернативи
+    (border-color или borderColor).
+    </section>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (16)</h2>
+    jQuery предлага редица методи предлагащи директна манипулация на някои от CSS свойствата:
+    <ul>
+        <li><code>$(selector).height()</code> - Връща височината на първият селектиран елемент.</li>
+        <li><code>$(selector).height(height)</code> - Задава височина <code>height</code> на всички селектирани елементи.</li>
+        <li><code>$(selector).innerHeight()</code> - Връща височината на първият селектиран елемент.</li>
+        <li><code>$(selector).outerHeight()</code> - Връща височината на първият селектиран елемент.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (17)</h2>
+    <h3>height vs innerHeight vs outerHeight vs outerHeight(true)</h3>
+    <ul>
+        <li><code>height</code> - връща височината на елемента (без padding).</li>
+        <li><code>innerHeight</code> - връща височината на елемента като включва padding.</li>
+        <li><code>outerHeight</code>- връща височината на елемента като включва padding, border</li>
+        <li><code>outerHeight(true)</code> - връща височината на елемента като включва padding, border и margin</li>
+    </ul>
+</section>
+
+<section>
+    <section>
+        <h2>Манипулация на DOM (18)</h2>
+        <ul>
+            <li><code>$(elem).offset()</code> - положението на първият от селектираните елементи, спрямо горният десен ъгъл на браузъра.</li>
+            <li><code>$(elem).position()</code> - положението на първият от селектираните елементи, спрямо горният десен ъгъл на родителският елемент.</li>
+            <li><code>$(elem).scrollLeft()</code> - позицията на хоризонталния scrollbar за първият елемент от списъкът селектирани елементи.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>Манипулация на DOM (18)</h2>
+        <ul>
+            <li><code>$(elem).scrollLeft(value)</code> - Задава позиция на хоризонталния scrollbar за всички селектирани елемент.</li>
+            <li><code>$(elem).scrollTop()</code> - позицията на вертикалния scrollbar за първият елемент от списъкът селектирани елементи.</li>
+            <li><code>$(elem).scrollTop(value)</code> - Задава позиция на вертикалния scrollbar за всички селектирани елемент.</li>
+        </ul>
+        * <code>offset</code> и <code>position</code> връщат обект от типа <code>{ top: y-value, left: x-value }</code>.
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2>Манипулация на DOM (19)</h2>
+        <p><code>elem.className</code></p>
+        <pre><code>
+function hasClass(elem, className) {
+  return elem.className.indexOf(className) >= 0;
+}
+function addClass(elem, className) {
+  if (hasClass(elem, className)) return elem;
+  elem.className += ' ' + className;
+  return elem; 
+}
+function removeClass(elem, className) {
+  if (!hasClass(elem, className)) return elem;
+  elem.className = elem.className.replace(RegExp('\\s?' + className), '');
+  return elem;
+}
+        </code></pre>
+    </section>
+    <section>
+    <h2>Манипулация на DOM (19)</h2>
+    <p>с jQuery: <code>addClass</code>, <code>removeClass</code>, <code>hasClass</code>
+    </section>
+</section>
+
+<section>
+    <h2>Манипулация на DOM (20)</h2>
+    <p> <code>classList</code>(IE10+, Firefox 3.6+, Chrome 8.0+, Safari 5.1+, Opera 11.5+)</p>
+    <br/>
+    <p> jQuery <code>toggleClass</code> </p>
+</section>
+
+<section>
+    <h2>Събития (1)</h2>
+    <aside class="notes"> Client-side JavaScript е свързан с изпълнението на някакви събития и тяхната обработка. Това, което разработчикът е длъжен да направи, за обработката на
+    дадено събитие е да зададе callback, който да бъде изпълнен при случване на самото събитие. Всичко от по-ниско ниво се изпълнява от браузъра. Браузърът поддържа event loop. При случването на дадени събития те се подреждат в опашка (FIFO) и се обработват в реда на постъпването им чрез event handlers зададени от разработчикът.</aside>
+
+    <pre><code>
+document.getElementById('btn').addEventListener('mousedown', function () {
+  alert('Hello world!');
+}, false); //Use capture, not supported by jQuery
+    </code></pre>
+    * Забележка: addEventListener се поддържа от IE9+, Chrome 1.0+, Firefox 1.0+ (и 6.0 use capture), Opera 11.60, Safari 1.0+.
+</section>
+
+<section>
+    <h2>Събития (2)</h2>
+    Стандартизирани от W3C са 2 посоки на обработка на събитията capturing и bubbling. Тъй като IE поддържа capturing от версия 9, jQuery не го поддържа изобщо (дори във версия 2+), за да запази съвместимост.
+    Пример:
+    <table>
+        <tr>
+            <td><iframe width="500" height="300" src="http://jsfiddle.net/mgechev/pcUQG/2/embedded/result,js" allowfullscreen="allowfullscreen" frameborder="0"></iframe></td>
+            <td><iframe width="500" height="300" src="http://jsfiddle.net/mgechev/pcUQG/1/embedded/result,js" allowfullscreen="allowfullscreen" frameborder="0"></iframe></td>
+        </tr>
+    </table>
+</section>
+
+<section>
+    <h2>Събития (3)</h2>
+    jQuery създава едно допълнително ниво на абстракция над стандарните DOM събития. Освен съвместимост между APIs на различните браузъри тази индиректност помага за по-голяма независимост между конкретната имплементация на браузъра и начина на използване. Например, методът <code>on</code> ни помага да закачаме event handlers към елементи, които все още не са добавени в DOM дървото:
+    <iframe width="500" height="300" src="http://jsfiddle.net/mgechev/ppK7n/embedded/result,js" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+</section>
+
+<section>
+    <h2>Събития (4)</h2>
+    <code>on</code> се използва по следния начин:
+    <pre><code>
+        $(selector).on('event-names', 'targets-selector' /* optional */, callback)
+    </code></pre>
+    Възможни стойности за <cde>event-name</code> са: <code> blur, focus, focusin, focusout, load, resize, scroll, unload, click, dblclick
+, mousedown, mouseup, mousemove, mouseover, mouseout, mouseenter, mouseleave
+, change, select, submit, keydown, keypress, keyup, error, contextmenu</code>.
+</section>
+
+<section>
+    <h2>Събития (5)</h2>
+    <p>За да избегнете memory leaks е важно, когато нямате нужда от даден елемент да извикате <code>remove</code>.</p>
+    <p>Ако искате да премахнете само един event handler можете да използвате:</p>
+    <pre><code>$(selector).off('event-names', 'targets-selector' /* optional */, callback);</code></pre>
+    <p>За всички handlers за дадени събития:</p>
+    <pre><code>$(selector).off('event-names')</code></pre>
+    <p>За всички събития на елементи:</p>
+    <pre><code>$(selector).off()</code></pre>
+</section>
+
+<section>
+    <h2>Събития (6)</h2>
+    Една от най-честите причини за memory leaks са event handler-те. JavaScript GC не може да "изчисти" паметта, която се използва от event handler-те.
+    За да бъде премахнат даден event handler на <code>off</code>, трябва да бъде подадена същата функция, която по-рано е била подадена на <code>on</code>.
+    Пример:
+    <pre><code>
+//Only this callback cannot be detached
+$(selector).on('click', function () {
+    //do something
+});
+    </code></pre>
+    <pre><code>
+var callback = function () {
+  //do something  
+};
+$(selector).on('click', callback);
+$(selector).off('click', callback);
+    </code></pre>
+</section>
+
+<section>
+    <section>
+    <h2>Събития (7)</h2>
+    Загубата на контекста (this).
+    <pre><code>
+$(selector).on('click', function () {
+    console.log(this); //DOM element
+});
+    </code></pre>
+    </section>
+    <section>
+    Начините за справяне са, чрез предварително съхраняване на контекста или чрез промяна на контекста на callback.
+    <pre><code>
+var self = this;
+$(selector).on('click', function () {
+    console.log(self);
+});
+
+//Using ECMAScript 5's bind
+$(selector).on('click', function () {
+    console.log(this);
+}.bind(this));
+
+//Using jQuery.proxy
+$(selector).on('click', jQuery.proxy(function () {
+    console.log(this);
+}, this));
+    </code></pre>
+    </section>
+</section>
+
+<section>
+    <h2>Събития (8)</h2>
+    jQuery предлага и други alias методи, които вътрешно извикват <code>on</code> или <code>off</code>. Това са <code>bind</code>, <code>unbind</code>, <code>blur</code>, <code>click</code>, <code>mouseenter</code>... и други.
+    Те предоставят по-малка функционалност от <code>on</code> и <code>off</code>, но в някои случаи позволяват семантично по-ясен код.
+</section>
+
+<section>
+    <h2>Събития (9)</h2>
+    <ul>
+        <li><code>$(selector).one(event, data /* optional */, callback)</code> - Добавя event handler към дадени елементи, който ще бъде извикан най-много веднъж за всеки от елементите.</li>
+        <li><code>$(selector).trigger(eventName)</code> - Извиква всички event handler, които са добавени към селектираните елементи за даденото събитие</li>
+        <li><code>$(selector).triggerHandler(eventName)</code> - Извиква всички event handlers, добавени към първият от селектираинте елементи.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Събития (10)</h2>
+    <h3>trigger vs triggerHandler</h3>
+    <ul>
+        <li><code>trigger</code> предизвиква bubbling и поведението при даденото събитие по подразбиране</li>
+        <li><code>trigger</code> извиква всички event handlers за всички селектирани елементи, докато triggerHandler извиква само за първия</li>
+        <li><code>trigger</code> позволява chaining, докато triggerHandler връща последната върната стойност от извиканите event handlers.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Събития (11)</h2>
+    <h3>Bubbling и поведение по подразбиране</h3>
+    <p>
+        За да се предотврати поведението по подразбиране при дадено събитие (например submit на форма) се използва методът:
+        <code>preventDefault</code> на събитието подадено на event handler.
+    </p>
+    <p>За предотвратяване на bubbling на събитие се използва:
+        <code>stopImmediatePropagation</code>
+    </p>
+    <p>Пример:
+        <table>
+            <tr>
+                <td><iframe width="400" height="300" src="http://jsfiddle.net/mgechev/czre2/2/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe></td>
+                <td><iframe width="400" height="300" src="http://jsfiddle.net/mgechev/czre2/1/embedded/" allowfullscreen="allowfullscreen" frameborder="0"></iframe></td>
+            </tr>
+        </table>
+    </p>
+</section>
+
+<section>
+    <h2>Ajax (1)</h2>
+    <blockquote>
+        Job interview for web developer:<br />
+        - Do you know what Ajax is?<br />
+        - CORS I do.<br />
+        - Hired!
+    </blockquote>
+</section>
+
+<section>
+    <h2>Ajax (2)</h2>
+    Ajax позволява осъществяването на HTTP заявки от клиента към сървъра без презареждане на страницата.
+    Неща, които трябва да бъдат взети под внимание са:
+    <ul>
+        <li>Same origin policy</li>
+        <li>Асинхронност на заявките</li>
+        <li>CORS</li>
+        <li>Cross-browser compatibility (ако харесвате IE6)</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Ajax (3)</h2>
+    <aside class="notes">
+    jQuery ни предлага façade за работа с API предлаган ни от браузъра. За по-стари версии на IE освен по-високо нива на абстрация получавахме и еднакъв API.
+    (в далечното минало IE не поддържаше XMLHttpRequest).
+    В момента jQuery ни позволява да не изпадаме в подробности...:
+    </aside>
+    <pre><code>
+function createXMLHttp() {
+  if (typeof XMLHttpRequest !== undefined) { //If XMLHttpRequest exists
+    return new XMLHttpRequest;
+  } else if (window.ActiveXObject) { //if on IE :(
+    var ieXMLHttpVersions = [
+            'MSXML2.XMLHttp.5.0',
+            'MSXML2.XMLHttp.4.0',
+            'MSXML2.XMLHttp.3.0',
+            'MSXML2.XMLHttp',
+            'Microsoft.XMLHttp'
+        ],
+        xmlHttp;
+    for (var i = 0; i &lt; ieXMLHttpVersions.length; i++) {
+      try {
+        xmlHttp = new ActiveXObject(ieXMLHttpVersions[i]);
+        return xmlHttp;
+      } catch (e) {
+      }
+    }
+  }
+}
+    </code></pre>
+</section>
+
+<section>
+    <h2>Ajax (4)</h2>
+    ...и още...:
+<pre><code>
+function getData(url, success, error) {
+  var xmlHttp = createXMLHttp(success, error);
+  xmlHttp.open('get', url, true);
+  xmlHttp.send(null);
+  xmlHttp.onreadystatechange = function() {
+    if (xmlHttp.readyState === 4) {
+      if (xmlHttp.status === 200) {
+        success.call(null, xmlHttp.responseText);
+      } else {
+        error.call(null, xmlHttp.responseText);
+      }
+    } else {
+      //still processing
+    }
+  };
+}
+</code></pre>
+</section>
+
+<section>
+    <h2>Ajax (5)</h2>
+    <p>Като напишем просто:</p>
+    <pre><code>$.get(url).done(function () {
+        //succes callback
+    }).fail(function () {
+        //failure callback
+    });</code></pre>
+</section>
+
+<section>
+    <h2>Ajax (6)</h2>
+    <ul>
+        <li><code>$.ajax</code> - Изпълнява ajax заявка с параметри зададени като object literal подаден на метода и връща jqXHR.</li>
+        <li><code>$.get</code> - Изпълнява get заявка и връща jqXHR.</li>
+        <li><code>$.post</code> - Изпълнява post заявка и връща jqXHR.</li>
+        <li><code>$(elem).load(url, data, complete)</code> - Изпълнява get заявка с параметри зададени в data и callback, който бива извикан при успешен и неуспешен request. При успешен request съдържанието на <code>elem</code> бива променено според върнатият отговор.</li>
+        <li><code>$.getJSON()</code> - Подобен на <code>$.get</code>, но при успешен response имплицитно се извиква <code>$.parseJSON</code>.</li>
+        <li><code>$.getScript()</code> - Подобен на <code>$.get</code>, но при успешна заявка изпълнява върнатият код (не използва <code>eval</code>).</li>
+    </ul>
+</section>
+
+<section>
+    <section>
+        <h2>Ajax (7)</h2>
+        <h3>Събития</h3>
+        Глобални събития, чиито callbacks се извикват при настъпване на даденото събитие.
+        <ul>
+            <li><code>$(elem).ajaxComplete()</code> - Извиква при изпълнение на ajax заявка.</li>
+            <li><code>$(elem).ajaxError()</code> - Извиква при неуспешно изпълнение на ajax заявка.</li>
+            <li><code>$(elem).ajaxSend()</code> - Извиква преди изпращане на ajax заявка.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>Ajax (7)</h2>
+        <h3>Събития</h3>
+        Глобални събития, чиито callbacks се извикват при настъпване на даденото събитие.
+        <ul>
+            <li><code>$(elem).ajaxStart()</code> - Извиква се при изпращане на ajax заявка.</li>
+            <li><code>$(elem).ajaxStop()</code> - Извиква се, когато изпълнението на всички ajax заявки е приключило.</li>
+            <li><code>$(elem).ajaxSuccess()</code> - Извиква се, когато изпълнението на ajax заявка е успешно.</li>
+        </ul>
+        * Полезни са в различни случаи - logging, debugging, responsive app.
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2>Ajax (8)</h2>
+        <h3>APIs от ниско ниво</h3>
+        <ul>
+            <li><code>$.ajaxPrefilter(callback(options, originalOptions, jqXHR))</code> - Извиква се преди изпълнението на всяка ajax заявка. <code>options</code> са настройките, които ще бъдат използвани за ajax заявката, <code>originalOptions</code> са настройките, които са подадени от потребителя при извикване на ajax заявката.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>Ajax (8)</h2>
+        <h3>APIs от ниско ниво</h3>
+        <ul>
+            <li><code>$.ajaxSetup(options)</code> - Задава стойности по подразбиране за аргументите, които не са специфицирани (bad practise).</li>
+            <li><code>$.ajaxTransport(callback(options, originalOptions, jqXHR))</code> - Използва се за модификация на начина, по който <code>$.ajax</code> работи. Подаденият callback трябва да върне обект с методи: <code>abort</code>, <code>send</code>. Това ще са методите, които <code>$.ajax</code> ще използва за изпращане и прекратяване на заявката.</li>
+        </ul>
+        * По-добре не използвайте споменатите методи.
+    </section>
+</section>
+
+<section>
+    <h2>Ajax (9)</h2>
+    <h3>Ajax Utils</h3>
+    <ul>
+        <li><code>$(form).serializeArray()</code> - Създава масив от двойки - име, стойност отговарящи на всички контроли от дадената форма.</li>
+        <li><code>$(selector).serialize()</code> - Създава URL-encoded низ от селектираните елементи.</li>
+        <li><code>$.param</code> - Създава URL-encoded низ от масив или обект.</li>
+    </ul>
+</section>
+
+<section>
+    <h2>Ajax (10)</h2>
+    <h3>Примери</h3>
+    <pre><code>
+$.ajax({
+  url: 'http://example.com/api',
+  type: 'post',
+  data: { some: 'data' }
+});
+    </code></pre>
+    <pre><code>
+$.ajax({
+  url: 'http://example.com/api',
+  type: 'post',
+  contentType: 'application/json',
+  data: JSON.stringify({ some: 'data' })
+});
+    </code></pre>
+    <pre><code>
+$.post('http://example.com/api', { some: 'data' }).always(function () {
+  console.log(arguments);
+});
+    </code></pre>
+</section>
+
+<section>
+    <h2>Ефекти (1)</h2>
+    jQuery предлага методи за различни визуални ефекти - fade, транслация, анимация на произволни CSS стилове.
+    Всички тези ефекти прави постъпково чрез промяна на анимираното свойство всеки 10 ms със стойност зависеща от разликата между началната и крайната стойност, както и евентуално използваният easing.
+    В случай, че анимираме твърде много елементи по този начин или някой callback отнема твърде много време за изпълнение можем да получим накъсване на анимацията. Броят фреймове, които получаваме за 1 секунда са <code>1000/(16 + N)</code>, където <code>N</code> е броят милисекунди, които изпълнението на нашия код отнема, средно за всеки фрейм.
+    В съвременните браузъри това не е най-ефективният начин за анимиране, затова са създадени няколко third-party плъгини за използване на <code>requestAnimationFrame</code> и CSS3 преходи.
+</section>
+
+<section>
+    <section>
+        <h2>Ефекти (2)</h2>
+        Няколко полезни метода:
+        <ul>
+            <li><code>$(selector).animate()</code> - Анимира произволни CSS свойства на елементите селектирани от дадения селектор.</li>
+            <li><code>$(selector).fadeIn(duration, callback)</code> - Анимира opacity на елементите селектирани от дадения селектор.</li>
+            <li><code>$(selector).fadeOut(duration, callback)</code> - Анимира opacity на елементите селектирани от дадения селектор.</li>
+            <li><code>$(selector).fadeToggle(duratio, easing, callback)</code> - Показва или скрива елемента спрямо текущата стойност на неговото opacity свойство.</li>
+        </ul>
+    </section>
+    <section>
+        <h2>Ефекти (2)</h2>
+        Няколко полезни метода:
+        <ul>
+            <li><code>$(selector).slideUp(duration, callback)</code> - Анимира височината на селектираните елементи.</li>
+            <li><code>$(selector).slideDown(duration, callback)</code> - Анимира височината на селектираните елементи.</li>
+            <li><code>$(selector).show(duration, callback)</code> - Показва елементите селектирани от дадения селектор. Този метод анимира размера на елементите, тяхното opacity и задава display block.</li>
+            <li><code>$(selector).hide(duration, callback)</code> - Скрива дадените елементи, като при приключване на анимациите по размера на елементе и тяхното opacity задава display - none.</li>
+        </ul>
+    </section>
+</section>
+
+<section>
+    <h2>Ефекти (3)</h2>
+    Примери:
+    <table>
+        <tr>
+            <td><iframe width="300" height="300" src="http://jsfiddle.net/mgechev/5gqpD/embedded/result,js" allowfullscreen="allowfullscreen" frameborder="0"></iframe></td>
+            <td><iframe width="300" height="300" src="http://jsfiddle.net/mgechev/5gqpD/4/embedded/result,js" allowfullscreen="allowfullscreen" frameborder="0"></iframe></td>
+        </tr>
+    </table>
+</section>
+
+<section>
+    <h2>Ефекти (4)</h2>
+    jQuery ни предлага <code>:animated</code> селектор, чрез който можем да селектираме всички елементи, които биват анимирани към текущия момент:
+    <code>
+        $(':animated').stop(); //Stop the animations of all currently animated elements
+    </code>
+    <code>stop</code> спира анимацията на даден елемент.
+</section>
+
+<section>
+    <h2>Deferred (1)</h2>
+    <p>callback(with hell)</p>
+    <pre><code>
+step1(function (value1) {
+  step2(value1, function(value2) {
+    step3(value2, function(value3) {
+      step4(value3, function(value4) {
+        // Do something with value4
+      });
+    });
+  });
+});
+    </code></pre>
+</section>
+
+<section>
+    <h2>Deferred (2)</h2>
+    <p>promise/future(MultiListp, Act1)</p>
+    <p>1</p>
+    <pre><code>
+function Promise() {
+  this._doOnFail = [];
+  this._doOnSuccess = [];
+  this._alwaysDo = [];
+}
+Promise.prototype.fail = function (f) {
+  this._doOnFail.push(f);
+  return this;
+};
+Promise.prototype.success = function (f) {
+  this._doOnSuccess.push(f);
+  return this;
+};
+Promise.prototype.always = function (f) {
+  this._alwaysDo.push(f);
+  return this;
+};
+    </code></pre>
+</section>
+
+<section>
+    <h2>Deferred (3)</h2>
+    <p>promise/future(MultiListp, Act1)</p>
+    <p>1</p>
+    <pre><code>
+function Deferred() {
+  this.promise = new Promise();
+}
+Deferred.prototype.reject = function (reason) {
+  this.promise._doOnFail.concat(this.promise._alwaysDo).forEach(function (f) {
+    f.call(null, reason);
+  });  
+};
+Deferred.prototype.resolve = function (reason) {
+  this.promise._doOnSuccess.concat(this.promise._alwaysDo).forEach(function (f) {
+    f.call(null, reason);
+  });
+};
+    </code></pre>
+</section>
+
+<section>
+    <h2>Deferred (4)</h2>
+    <h3>Начин на използване</h3>
+    <pre><code>
+function doAjaxRegistration() {
+  var deferred = new Deferred();
+  //do some ajax stuff
+  //on ajax success deferred.resolve(result);
+  //on ajax error deferred.reject(error);
+  return deferred.promise;
+}
+
+disableForm();
+doAjaxRegistration()
+.always(function () {
+  enableForm();
+})
+.success(function () {
+  showSuccessfullRegister();
+})
+.fail(function () {
+  showUnsuccessfullRegister();
+});
+    </code></pre>
+</section>
+
+<section>
+    <h2>Deferred (5)</h2>
+    jQuery предлага подобен API:
+    <ul>
+        <li><code>promise.then()</code> - Handlers се извикват при resolve, reject или когато deferred обектът е все още в прогрес. Позволява chaining.</li>
+        <li><code>deferred.promise()</code></li>
+        <li><code>deferred.reject()</code></li>
+        <li><code>deferred.resolve()</code></li>
+        <li><code>promise.done()</code></li>
+        <li><code>promise.fail()</code></li>
+        <li><code>promise.always()</code></li>
+    </ul>
+</section>
+
+<section>
+    <h2>Deferred (7)</h2>
+    <h3>Chaining с валидация на форма</h3>
+    <iframe width="500" height="300" src="http://jsfiddle.net/mgechev/fRNdK/1/embedded/result,js" allowfullscreen="allowfullscreen" frameborder="0"></iframe>
+</section>
+
+<section>
+    <h2>Благодаря за вниманието!</h2>
+</section>
