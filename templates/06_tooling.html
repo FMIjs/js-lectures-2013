@@ -1,0 +1,989 @@
+<section>
+	<h3>Table of content</h3>
+	<ul>
+		<li>Problems with the JavaScript development</li>
+		<li>JavaScript alternatives</li>
+		<li>Text editors and IDEs</li>
+		<li>Documentation</li>
+		<li>Debugging</li>
+		<li>Profiling</li>
+		<li>Building</li>
+		<li>Bootstrapping</li>
+	</ul>
+</section>
+
+<section>
+	<h3>Problems with JavaScript</h3>
+	<ul>
+		<li>Weird things (number, undefined, null)</li>
+		<li>Dynamically and weakly typed</li>
+		<li>Unusual OO model</li>
+		<li>Mixture of multiple paradigms</li>
+	</ul>
+</section>
+
+
+	<section>
+		<h3>Overview of JS alternatives</h3>
+		<ul>
+			<li>CoffeeScript - minimalistic, ruby like</li>
+			<li>JSX - statically typed, similar to JS</li>
+			<li>Dart - optional types</li>
+			<li><a href="http://altjs.org/"></a>Many others...</a></li>
+		</ul>
+	</section>
+	<section>
+		<h3>CoffeeScript</h3>
+		<ul>
+			<li>Has classes</li>
+			<li>Has single way to implement inheritance</li>
+			<li>Eliminates some of the defects in JavaScript</li>
+			<li>Ruby-like, fun</li>
+		</ul>
+	</section>
+	<section>
+		<h3>CoffeeScript example</h3>
+		<pre><code>
+class Animal
+    constructor : (@species, @isMammal=false) ->
+ 
+class Dog extends Animal
+    constructor : (@name) ->
+        super ("canine",true)
+ 
+    toString : ->
+        "#{@name} is a #{@species}."
+		</code></pre>
+	</section>
+	<section>
+		<p>The CoffeeScript transpiler turns CoffeeScript code to well written, readable JavaScript</p>
+		<pre><code>
+(function() {
+  #Animal and Class definition
+ 
+  Dog = (function(_super) {
+ 
+    __extends(Dog, _super);
+ 
+    function Dog(name) {
+      this.name = name;
+      Dog.__super__.constructor.call(this, "canine", true);
+      return;
+    }
+ 
+    Dog.prototype.toString = function() {
+      return "" + this.name + " is a " + this.species + ".";
+    };
+ 
+    return Dog;
+ 
+  })(Animal);
+ 
+}).call(this);
+ 
+		</code></pre>
+	</section>
+	<section>
+		<h3>CoffeeScript</h3>
+		<p>Can be used with already existing JavaScript libraries and frameworks i.e. you can use it with jQuery, AngularJS, Backbone.js</p>
+		<p>CoffeeScript has large community, it is open-source. It can be debugged in Google Chrome and Firefox 23+ through source maps.</p>
+	</section>
+	<section>
+		<h3>Source maps</h3>
+		<p>
+			<pre><code>
+	f(y): File-We-Are-Not-Interested-In -> File-We-Are-Interested-In
+			</code></pre>
+			f is bijective function.
+		</p>
+	</section>
+	<section>
+		<h3>Source maps</h3>
+		<p>In other words something which maps our generated code to the original. In our case object literal.</p>
+		<pre><code>
+{
+    version : 3,
+    file: "out.js",
+    sourceRoot : "",
+    sources: ["foo.js", "bar.js"],
+    names: ["src", "maps", "are", "fun"],
+    mappings: "AAgBC,SAAQ,CAAEA"
+}
+		</code></pre>
+	</section>
+	<section>
+		<h3>JSX</h3>
+		<blockquote cite="https://github.com/jsx/JSX/">
+	JSX - a faster, safer, easier JavaScript.
+		</blockquote>
+	</section>
+	<section>
+		<h3>JSX</h3>
+		<ul>
+			<li>Statically typed (safer)</li>
+			<li>Object-oriented (classical inheritance, so easier)</li>
+			<li>Performs optimizations (faster)</li>
+			<li>Source maps support</li>
+			<li>Facebook's REACT is based on JSX</li>
+			<li>Auto-completion in VIM</li>
+		</ul>
+	</section>
+	<section>
+		<pre><code>
+import "js/web.jsx";
+
+class Config {
+	static const quantity = 360;
+	static const size     = 2.0;
+	static const decay    = 0.98;
+	static const gravity  = 2.0;
+	static const speed    = 6.0;
+
+	static const canvasId = "night-sky";
+	static const fpsElementId = "fps";
+}
+/* Spark */
+final class FireworkView {
+	var cx : CanvasRenderingContext2D;
+	var width : int;
+	var height : int;
+
+	function constructor(canvas : HTMLCanvasElement) {
+		this.cx = canvas.getContext("2d") as CanvasRenderingContext2D;
+
+		this.width  = canvas.width;
+		this.height = canvas.height;
+
+		var rect = canvas.getBoundingClientRect();
+		this.left = rect.left;
+		this.top  = rect.top;
+	}
+
+}
+		</code></pre>
+		<br>
+	</section>
+	<section>
+		<h3>Dart</h3>
+		<ul>
+			<li>Allows statically typing</li>
+			<li>Has Eclipse-based IDE</li>
+			<li>Easier refectoring</li>
+			<li>Better performance by JavaScript</li>
+			<li>By Google</li>
+			<li>Native support in special build of Chromium</li>
+			<li>Source maps</li>
+			<li>Port of AngularJS</li>
+			<li>Awesome documentation</li>
+		</ul>
+	</section>
+	<section>
+		<pre><code>
+Future _loadFromDB(Database db) {
+  _db = db;
+
+  var trans = db.transaction(MILESTONE_STORE, 'readonly');
+  var store = trans.objectStore(MILESTONE_STORE);
+
+  var cursors = store.openCursor(autoAdvance: true).asBroadcastStream();
+  cursors.listen((cursor) {
+    var milestone = new Milestone.fromRaw(cursor.key, cursor.value);
+    milestones.add(milestone);
+  });
+
+  return cursors.length.then((_) {
+    return milestones.length;
+  });
+}
+		</code></pre>
+	</section>
+	<section>
+		<h2>If you still prefer JavaScript...</h2>
+	</section>
+	<section>
+		<h2>JSLint, JSHint</h2>
+		<ul>
+			<li>Tools for statical code analysis. Save you from common mistakes.</li>
+			<li>JSLint is more strict (demo). Both can be configured to fit in the best way to your needs.</li>
+			<li>Highly configurable, you can change almost each rule.</li>
+			<li>Introduce common coding standards (especially JSLint).</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Text editors and IDEs</h3>
+		<ul>
+			<li>Sublime Text</li>
+			<li>WebStorm</li>
+			<li>Brackets</li>
+			<li>Vim</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Sublime Text</h3>
+		<ul>
+			<li>Not free ($70 but unlimited evaluation period)</li>
+			<li>Very extensible</li>
+			<li>Very fast</li>
+			<li>Customizable through JSON file</li>
+			<li>Comfortable for coding</li>
+			<li>Multiple cursors</li>
+			<li>Zen Coding (with plugin)</li>
+			<li>JSLint and JSHint plugins</li>
+			<li>Quick find</li>
+		</ul>
+	</section>
+	<section>
+		<h3>WebStorm</h3>
+		<ul>
+			<li>Not free (€44 personal license, 30 days evaluation)</li>
+			<li>IDE by JetBrains</li>
+			<li>Automatically compile TypeScript</li>
+			<li>Most feature complete</li>
+			<li>Doesn't help with dynamically typed JavaScript</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Brackets</h3>
+		<ul>
+			<li>Free and open source</li>
+			<li>Quick find</li>
+			<li>LiveReload (built in)</li>
+			<li>Extensible</li>
+			<li>Built with JavaScript, CSS, HTML</li>
+			<li>Debugger (with extension)</li>
+			<li>Pop-up styles, zen coding and more...</li>
+		</ul>
+	</section>
+	<section>
+		<h3>VIM</h3>
+		<ul>
+			<li>Free and open source</li>
+			<li>Extensible</li>
+			<li>Many extensions</li>
+			<li>Can be used in the console</li>
+			<li>Lightweight</li>
+			<li>Long learning curve</li>
+		</ul>
+	</section>
+	<section>
+		<h2>Put your favourite editor/IDE here</h2>
+		<p>JavaScript can be used with Eclipse, Visual Studio, Notepad++, TextMate, Emacs, Gedit, Notepad...</p>
+	</section>
+
+
+	<section>
+		<h3>Code organization</h3>
+		<p>JavaScript projects give the wrong feeling to the developer that he should develop them in a single file. This leads to slower navigation inside the source code and increase the complexity.</p>
+		<p><strong>Put each component into different file.</strong></p>
+	</section>
+	<section>
+		<h3>Module architecture</h3>
+		<p>In the module architecture put each module in different file. Put the initialization code in different file.</p>
+		<pre><code>
+   js
+   ├── libs
+   └── plainvm
+       ├── core.js
+       ├── init.js
+       ├── layout
+       │   ├── index_side_panel_structure.js
+       │   ├── install_wizard.js
+       │   └── main_content_structure.js
+       ├── system
+       │   ├── connection_handler.js
+       │   ├── install_vm.js
+       │   └── remote_command_bridge.js
+       └── ui
+           ├── install_wizard.js
+           ├── preloader.js
+           ├── vm_control.js
+           ├── vm_details.js
+           ├── vm_settings.js
+           └── vms_list.js
+		</code></pre>
+	</section>
+	<section>
+		<h3>MV* frameworks</h3>
+		<p>In the different frameworks there are two main approaches:</p>
+		<ul>
+			<li>Group by component type (and second level functionality)</li>
+			<li>Group by functionality (and second level by component type)</li>
+		</ul>
+	</section>
+	<section>
+		<h3>MV* frameworks - component types</h3>
+		<pre><code>
+├── app
+│   ├── app.js
+│   ├── controllers
+│   │   ├── page1
+│   │   │   ├── FirstCtrl.js
+│   │   │   └── SecondCtrl.js
+│   │   └── page2
+│   │       └── ThirdCtrl.js
+│   ├── directives
+│   │   ├── page1
+│   │   │   └── directive1.js
+│   │   └── page2
+│   │       ├── directive2.js
+│   │       └── directive3.js
+│   ├── filters
+│   │   └── page2
+│   └── services
+│       ├── CommonService.js
+│       └── models
+│           ├── Model1.js
+│           └── Model2.js
+├── lib
+└── test
+		</code></pre>
+	</section>
+	<section>
+		<h3>MV* frameworks - functionality</h3>
+		<pre><code>
+├── app
+│   ├── app.js
+│   ├── common
+│   │   ├── controllers
+│   │   ├── directives
+│   │   ├── filters
+│   ├── page1
+│   │   ├── controllers
+│   │   │   ├── FirstCtrl.js
+│   │   │   └── SecondCtrl.js
+│   │   ├── filters
+│   │   └── services
+│   │       ├── service1.js
+│   │       └── service2.js
+│   └── page2
+│       ├── controllers
+│       │   └── ThirdCtrl.js
+│       ├── directives
+│       ├── filters
+│       │   └── filter3.js
+│       └── services
+│           └── service3.js
+├── lib
+└── test
+		</code></pre>
+	</section>
+
+	<section>
+		<h2>JSDoc</h2>
+		<p>Documenting your code is very important process. In JavaScript you can use notations similar to Javadoc called JSDoc. JSDoc does not help you only when you need to remembre what given snippet does but also by:</p>
+		<ul>
+			<li>Automatical generation of documentation</li>
+			<li>"Type checking" in some editors</li>
+		</ul>
+	</section>
+	<section>
+		<h2>Example</h2>
+		<pre><code>
+    /**
+     * [foo description]
+     * @param  {[type]} a [description]
+     * @param  {[type]} b [description]
+     * @param  {[type]} c [description]
+     * @param  {[type]} d [description]
+     * @return {[type]}   [description]
+     */
+    function foo(a, b, c, d) {
+        // body...
+        return e;
+    }
+		</code></pre>
+
+	</section>
+	<section>
+		<h2>Example</h2>
+		<p>You can define given functions as constructors:</p>
+		<pre><code>
+	/**
+	 * Creates a new Item.
+	 * @constructor
+	 */
+	function Item() {
+	}
+
+	var item = new Item();
+		</code></pre>
+	</section>
+	<section>
+		<small>
+		<ul>
+			<li><code>@abstract</code> - This member must be implemented (or overridden) by the inheritor.</li>
+			<li><code>@access</code> - Specify the access level of this member - private, public, or protected.</li>
+			<li><code>@alias</code> - Treat a member as if it had a different name.</li>
+			<li><code>@augments</code> - This object adds onto a parent object.</li>
+			<li><code>@author</code> - Identify the author of an item.</li>
+			<li><code>@borrows</code> - This object uses something from another object.</li>
+			<li><code>@callback</code> - Document a callback function.</li>
+			<li><code>@classdesc</code> - Use the following text to describe the entire class.</li>
+			<li><code>@constant</code> - Document an object as a constant.</li>
+			<li><code>@constructor</code> - This function is intended to be called with the "new" keyword.</li>
+			<li><code>@constructs</code> - This function member will be the constructor for the previous class.</li>
+			<li><code>@copyright</code> - Document some copyright information.</li>
+		</ul>
+		</small>
+	</section>
+	<section>
+		<small>
+		<ul>
+			<li><code>@default</code> - Document the default value.</li>
+			<li><code>@deprecated</code> - Document that this is no longer the preferred way.</li>
+			<li><code>@desc</code> - Describe a symbol.</li>
+			<li><code>@enum</code> - Document a collection of related properties.</li>
+			<li><code>@event</code> - Document an event.</li>
+			<li><code>@example</code> - Provide an example of how to use a documented item.</li>
+			<li><code>@exports</code> - Identify the member that is exported by a JavaScript module.</li>
+			<li><code>@external</code> - Document an external class/namespace/module.</li>
+			<li><code>@file</code> - Describe a file.</li>
+			<li><code>@fires</code> - Describe the events this method may fire.</li>
+			<li><code>@global</code> - Document a global object.</li>
+			<li><code>@ignore</code> - [todo] Remove this from the final output.</li>
+			<li><code>@inner</code> - Document an inner object.</li>
+		</ul>
+		</small>
+	</section>
+	<section>
+		<small>
+		<ul>
+			<li><code>@instance</code> - Document an instance member.</li>
+			<li><code>@kind</code> - What kind of symbol is this?</li>
+			<li><code>@lends</code> - Document properties on an object literal as if they belonged to a symbol with a given name.</li>
+			<li><code>@license</code> - [todo] Document the software license that applies to this code.</li>
+			<li><code>@link</code> - Inline tag - create a link.</li>
+			<li><code>@member</code> - Document a member.</li>
+			<li><code>@memberof</code> - This symbol belongs to a parent symbol.</li>
+			<li><code>@method</code> - Describe a method or function.</li>
+			<li><code>@mixes</code> - This object mixes in all the members from another object.</li>
+			<li><code>@mixin</code> - Document a mixin object.</li>
+			<li><code>@module</code> - Document a JavaScript module.</li>
+			<li><code>@name</code> - Document the name of an object.</li>
+			<li><code>@namespace</code> - Document a namespace object.</li>
+		</ul>
+		</small>
+	</section>
+	<section>
+		<small>
+		<ul>
+			<li><code>@param</code> - Document the parameter to a function.</li>
+			<li><code>@private</code> - This symbol is meant to be private.</li>
+			<li><code>@property</code> - Document a property of an object.</li>
+			<li><code>@protected</code> - This member is meant to be protected.</li>
+			<li><code>@public</code> - This symbol is meant to be public.</li>
+			<li><code>@readonly</code> - This symbol is meant to be read-only.</li>
+			<li><code>@requires</code> - This file requires a JavaScript module.</li>
+			<li><code>@returns</code> - Document the return value of a function.</li>
+			<li><code>@see</code> - Refer to some other documentation for more information.</li>
+			<li><code>@since</code> - When was this feature added?</li>
+			<li><code>@static</code> - Document a static member.</li>
+			<li><code>@summary</code> - A shorter version of the full description.</li>
+		</ul>
+		</small>
+	</section>
+	<section>
+		<small>
+		<ul>
+			<li><code>@this</code> - What does the 'this' keyword refer to here?</li>
+			<li><code>@throws</code> - Describe what errors could be thrown.</li>
+			<li><code>@todo</code> - Document tasks to be completed.</li>
+			<li><code>@tutorial</code> - Insert a link to an included tutorial file.</li>
+			<li><code>@type</code> - Document the type of an object.</li>
+			<li><code>@typedef</code> - Document a custom type.</li>
+			<li><code>@variation</code> - Distinguish different objects with the same name.</li>
+			<li><code>@version</code> - Documents the version number of an item.</li>
+		</ul>
+		</small>
+	</section>
+	<section>
+		<h2>Documentation generation</h2>
+		<p>You can generate documentation using <a href="https://github.com/jsdoc3/jsdoc">jsdoc</a> or <a href="https://code.google.com/p/jsdoc-toolkit/">jsdoc-toolkit</a>.</p>
+	</section>
+
+	<section>
+		<h2>Debugging</h2>
+		<p>You can debug JavaScript in almost each browser. Including even mobile web browsers.</p>
+		<p>Most advanced debugging tools have:</p>
+		<ul>
+			<li>Google Chrome - Chrome Dev Tools</li>
+			<li>Firefox - Firebug or Firefox Development Tools</li>
+			<li>Safari - Development tools which are similar to Chrome Dev Tools but less powerful</li>
+			<li>Opera - Dragonfire</li>
+			<li>Internet Explorer</li>
+		</ul>
+	</section>
+	<section>
+		<h1>Debugging demo</h1>
+	</section>
+	<section>
+		<h3>Debugging in Chrome for Android</h3>
+		<img src="../images/tooling/android.jpg" alt="">
+	</section>
+	<section>
+		<h3>Debugging in Chrome for Android</h3>
+		<p>When you enable the debugging via USB you need:</p>
+		<ul>
+			<li>Chrome for Android 28+</li>
+			<li>ADB Chrome extension installed on your development machine</li>
+		</ul>
+		<p>After that run:</p>
+		<pre><code>
+	adb forward tcp:9222 localabstract:chrome_devtools_remote
+		</code></pre>
+		<p>and open: <a href="http://localhost:9222/">localhost:9222</a></p>
+	</section>
+	<section>
+		<h2>Debugging in Chrome for Android</h2>
+	</section>
+	<section>
+		<h2>Debugging mobile</h2>
+		<p>For debugging in other mobile browsers check:</p>
+		<ul>
+			<li>about:debug in the default Android browser</li>
+			<li><a href="https://github.com/lexandera/Aardwolf">Aardwolf</a></li>
+			<li><a href="https://hacks.mozilla.org/2012/08/remote-debugging-on-firefox-for-android/">Remote Debugging on Firefox for Android</a></li>
+			<li><a href="http://moduscreate.com/enable-remote-web-inspector-in-ios-6/">Safari on iOS</a></li>
+			<li><a href="https://developers.google.com/chrome/mobile/docs/debugging">Chrome (any OS)</a></li>
+		</ul>
+	</section>
+
+	<section>
+		<h3>Performance</h3>
+		<p>Your application's performance could be measured in three ways:</p>
+		<ul>
+			<li>Network performance (the most important one since the SPA revolution)</li>
+			<li>Compute performance (the performance of your JavaScript)</li>
+			<li>Render performance (frames per second)</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Network performance</h3>
+		<p>Network performance usualy is <i>almost</i> browser independent.</p>
+		<p>For measuring performance we will use Chrome Dev Tools's network tab.</p>
+	</section>
+	<section>
+		<h3>Measuring network performance</h3>
+		<img src="../images/tooling/chrome-dev-tools-network.png" alt="">
+	</section>
+	<section>
+		<h3>What makes our application slow?</h3>
+		<ul>
+			<li>Opening new TCP connections (latency)</li>
+			<li>HTTP requests (latency)</li>
+			<li>File size (bandwidth)</li>
+			<li>DNS lookups (latency)</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Opening new TCP connections</h3>
+		<p>HTTP 1.1 provides:</p>
+		<pre><code>
+	Connection: Keep-Alive
+		</code></pre>
+		<p>This way we can reuse TCP connections for few HTTP requests. This is especially useful for mobile applications where the latency if very high.</p>
+		<p>Enable KeepAlive in httpd.conf (it is host level in .htaccess you can only set the Connection: Keep-Alive header).</p>
+	</section>
+	<section>
+		<h3>HTTP requests</h3>
+		<p>There are few common for most pages resources which cause HTTP requests:</p>
+		<ul>
+			<li>HTML files and templates</li>
+			<li>JavaScript files</li>
+			<li>CSS files</li>
+			<li>Images</li>
+		</ul>
+	</section>
+	<section>
+		<h3>HTTP requests</h3>
+		<p>You can put everything inline, this way you will make only one HTTP request for getting the whole page but you cannot take advantage of caching.</p>
+		<p>Few ways for speeding up:</p>
+		<ul>
+			<li>Pre-fetching</li>
+			<li>Concatenation of files</li>
+			<li>Caching</li>
+		</ul>
+	</section>
+	<section>
+		<h3>JavaScript files</h3>
+		<p>Good practice is to concatenate the JavaScript files and put them in the bottom. Another possible startegy is to load the files asynchronously on demand.</p>
+		<p>Loading JavaScript files is usually blocking - the document won't be rendered before the JavaScript files are resolved.</p>
+	</section>
+	<section>
+		<p>Making the scripts load asynchronously with (HTML5):</p>
+		<pre><code>
+	&lt;script src="//ajax.googleapis.com/ajax/libs/jquery/x.xx.x/jquery.min.js" async&gt;&lt;/script&gt;
+		</code></pre>
+		<p>...or IIFE:</p>
+		<pre><code>
+	(function () {
+		var s = document.createElement('script');
+	    s.type = "text/javascript";
+	    s.src = "link.js";
+	    document.body.appendChild(s);
+	}());
+		</code></pre>
+	</section>
+	<section>
+		<h3>CSS files</h3>
+		<p>CSS files should be also concatenated.</p>
+		<p>Small CSS files can be inlined.</p>
+	</section>
+	<section>
+		<h3>Images</h3>
+		<p>Loading images can lead to many HTTP requests. With the latest HTTP specification there is no elegant way for workarounding this. The best option is creating sprites:</p>
+		<img src="../images/tooling/facebook-sprite.png" alt="">
+	</section>
+	<section>
+		<h3>Using sprites</h3>
+		<p>Usually when using sprites you need to use the <code>background-position</code> and <code>background-size</code> CSS properties.</p>
+		<pre><code>
+	.star-icon {
+		background-image: url(sprite.png);
+		background-size: 50px 50px;
+		backgroind-position: 200px 200px;
+	}
+		</code></pre>
+	</section>
+	<section>
+		<h3>Reducing HTTP by inlining</h3>
+		<p>HTTP requests can be reduced by inlining the resources. In JavaScript and CSS it is trivial, for inlining images you should use Base64 encoding (IE8+).</p>
+	</section>
+	<section>
+		<h3>File size</h3>
+		<p>The file size can be reduced with compression.</p>
+		<ul>
+			<li>For the JavaScript files could be used:
+				<ul>
+					<li>Google Closure Compiler</li>
+					<li>UglifyJS</li>
+					<li>YUI compressor</li>
+					<li>JSMin</li>
+				</ul>
+			</li>
+			<li>CSS minification</li>
+			<li>HTML minification</li>
+			<li>Images compression (usually lost of quality)</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Gzip</h3>
+		<p>Browsers are able to uncompress resources which are pointed as compressed by the web server. The compression can reduce your CSS files to up 70%!</p>
+		<pre><code>
+	Content-Encoding: gzip
+		</code></pre>
+		<p>You should also consider that the mobile devices has lower computing capacities.</p>
+		<p>In Apache gzip can be enabled and processed with the module mod_deflate.</p>
+	</section>
+	<section>
+		<h3>DNS lookup</h3>
+		<p>You can't escape from the DNS lookups but you can make "pre-resolve".</p>
+		<pre><code>
+    &lt;link rel="dns-prefetch" href="//www.domain1.com"&gt;
+		</code></pre>
+		<p>Firefox 3.5+, Chrome, Safari 5+ and IE 9+.</p>
+	</section>
+	<section>
+		<h3>Caching</h3>
+		<p>You can use the browser's caching by taking advantage of the expires or cache-control (HTTP 1.1) headers (mod_expires in apache).</p>
+		<p>Expires requires strict synchronization between the server and client's clocks</p>
+		<p>Cache-Control uses max-age (relative amount of time)</p>
+		<p><a href="https://www.mobify.com/blog/smartphone-localstorage-outperforms-browser-cache/">Smartphone Browser localStorage is up to 5x Faster than Native Cache (New Research)</a></p>
+	</section>
+	<section>
+		<h3>Use CDNs</h3>
+		<p>They will provide the users content near to them (lower latency) and will prevent the 6 threads per origin limitation.</p>
+	</section>
+	<section>
+		<h3>Network performance profiling tools (demo)</h3>
+		<ul>
+			<li>PageSpeed</li>
+			<li>YSlow</li>
+			<li>phantomas</li>
+		</ul>
+	</section>
+
+	<section>
+		<h3>Compute performance profiling</h3>
+		<p>Slow computations in your application can cause even worse user expereience than application which loads slow.</p>
+		<p>There are good profiling tools in:</p>
+		<ul>
+			<li>Chrome Dev Tools</li>
+			<li>Firebug</li>
+			<li>Firefox Dev Tools</li>
+			<li>Dragon Fire</li>
+			<li>IE</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Chrome Dev Tools Profiler</h3>
+		<img src="../images/tooling/cpu-profiler.png" alt="">
+	</section>
+	<section>
+		<h2>Profiling the compute performance (demo)</h2>
+	</section>
+	<section>
+		<h3>Memory profiler</h3>
+		<p>If there are many memory leaks in your application this may slow it down or even crash the browser (demo AngularJS Docs)</p>
+		<img src="../images/tooling/memory-profiling.png" alt="">
+	</section>
+	<section>
+		<h3>Memory leaks</h3>
+		<p>In JavaScript there are few common causes of memory leaks:</p>
+		<ul>
+			<li>Closures</li>
+			<li>DOM</li>
+			<li>Application specific...</li>
+		</ul>
+	</section>
+	<section>
+		<h3>Timeline</h3>
+		<img src="../images/tooling/chrome-timeline.jpg" alt="">
+	</section>
+	<section>
+		<h3>Timeline</h3>
+		<p>Timeline shows the memory usage during given time interval.</p>
+		<p>It also shows the different frames, you can improve your computational performance this way.</p>
+	</section>
+	<section>
+		<h2>Timeline (<a href="http://debuggingmemoryleaks.eu01.aws.af.cm/example/1" target="blank">Demo</a>, <a href="http://debuggingmemoryleaks.eu01.aws.af.cm/example/2" target="blank">Demo</a>, <a href="http://debuggingmemoryleaks.eu01.aws.af.cm/example/3" target="blank">Demo</a> and <a href="http://debuggingmemoryleaks.eu01.aws.af.cm/example/4" target="_blank">Demo</a>)</h2>
+	</section>
+	<section>
+		<h3>Heap snapshot</h3>
+		<p>Using the heap snapshot you can see the memory usage between two moments. You can compare the usage and see what objects have leaked.</p>
+		<p>You can see the element types but sometimes it is hard to find the exact place where they have been created. For such cases you can wrap their constructor and using <code>Error</code> object to see the whole stack trace.</p>
+	</section>
+
+	<section>
+		<h3>Why...</h3>
+		<p>For building your application there are plenty of different tasks which should be done each time you want to deploy.</p>
+		<p>There are:
+			<ul>
+				<li>Make</li>
+				<li>Rake</li>
+				<li>Cake</li>
+				<li>...</li>
+			</ul>
+		</p>
+	</section>
+	<section>
+		<h2>Grunt</h2>
+		<p>Grunt is extensible task management system which allows you to execute different tasks. It is highly extensible, you have plugin for almost everything and each plugin is completely open-source so you can customize it to your needs.</p>
+		<p>For using Grunt you need Node.js and install the <code>grunt-cli</code></p>
+		<pre><code>
+	npm install -g grunt-cli
+		</code></pre>
+	</section>
+	<section>
+		<h2>Gruntfile.js</h2>
+		<p>Gruntfile.js defines all the tasks you need for your building process. You can group and run them in any order.</p>
+		<p>For creating your building process with Grunt.js you write JavaScript which is fun and easy, you need basic concepts such as object literals.</p>
+	</section>
+	<section>
+		<h2>Grunt plugins</h2>
+		<p>For installing grunt plugins you can use <code>npm</code> (Node Package Manager).</p>
+		<p>You should start by running:</p>
+		<pre><code>
+	npm init
+		</code></pre>
+		<p>The <code>init</code> command creates configuration file called <code>package.json</code>. It contains basic information for your project such as: name, repository, dependencies, version,...</p>
+	</section>
+	<section>
+		<h2>Installing grunt plugins</h2>
+		<p>Using <code>npm</code> you can install grunt plugins using:</p>
+		<pre><code>
+	npm install grunt-contrib-uglify --save-dev
+		</code></pre>
+		<p><code>--save-dev</code> is not required but it will save you time by including the grunt plugin in the development dependencies of your project.</p>
+	</section>
+	<section>
+		<h2>Using grunt plugins</h2>
+		<p>Grunt configuration is contained inside Gruntfile.js. It loads different grunt plugins, configures them and creates tasks.</p>
+		<p>You can load grunt plugin by:</p>
+		<pre><code>
+	grunt.loadNpmTasks('grunt-contrib-uglify');
+		</code></pre>
+	</section>
+	<section>
+		<h2>Gruntfile.js configuration</h2>
+		<p>You can configure your plugin by:</p>
+		<pre><code>
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    uglify: {
+      build: {
+        src: 'src/<%= pkg.name %>.js',
+        dest: 'build/<%= pkg.name %>.min.js'
+      }
+    }
+  });
+		</code></pre>
+	</section>
+	<section>
+		<h2>Creating tasks</h2>
+		<p>In case you have many tasks you want to run for building your project you can use:</p>
+		<pre><code>
+  	grunt.registerTask('default', ['concat', 'uglify', 'cssmin', 'copy']);
+		</code></pre>
+	</section>
+	<section>
+		<h2>Putting all together</h2>
+		<pre><code>
+module.exports = function(grunt) {
+
+  // Project configuration.
+  grunt.initConfig({
+    pkg: grunt.file.readJSON('package.json'),
+    uglify: {
+      options: {
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+      },
+      build: {
+        src: 'src/<%= pkg.name %>.js',
+        dest: 'build/<%= pkg.name %>.min.js'
+      }
+    }
+  });
+
+  // Load the plugin that provides the "uglify" task.
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+
+  // Default task(s).
+  grunt.registerTask('default', ['uglify']);
+
+};
+		</code></pre>
+	</section>
+
+	<section>
+		<h2>Runnig grunt tasks</h2>
+		<p>After registering given task you can run it by:</p>
+		<pre><code>
+	grunt taskname
+		</code></pre>
+		<p>There is one special task named "default" which can be run:</p>
+		<pre><code>
+	grunt
+		</code></pre>
+	</section>
+
+	<section>
+		<h2>Bower</h2>
+		<p>Often task is resolving project dependencies dynamically. It is not needed to have all your dependencies in your repository.</p>
+		<p>In Java you can use Maven Dependency plugin, in Node.js you can use <code>npm</code>.</p>
+		<p><p>Bower</p> is the package management system for the web!</p>
+	</section>
+	<section>
+		<h2>Bower initialization</h2>
+		<p>For initializing bower for your project you need:</p>
+		<pre><code>
+	#if you haven't already installed bower
+	npm install -g bower
+
+	#create bower.json
+	bower init
+		</code></pre>
+	</section>
+	<section>
+		<h2>Bower configuration</h2>
+		<pre><code>
+{
+  "name": "Math-BrowniePoints-WebApp",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Brownie-Points/Math-BrowniePoints-WebApp",
+  "authors": [
+  ],
+  "description": "Brownie Points math Web App",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angularjs": "https://ajax.googleapis.com/ajax/libs/angularjs/1.1.5/angular.js",
+    "angular-ui-router": "0.2.0",
+    "jcrop": "0.9.12",
+    "jquery": "2.0.0",
+    "jquery-ui": "1.10.3",
+  }
+}
+
+		</code></pre>
+	</section>
+	<section>
+		<h2>Bower configuration</h2>
+		<p>All you need to take care of is the list of dependencies.</p>
+		<p>You can specify version of given dependency, range of versions or just say <code>newest</code> for the last version.</p>
+	</section>
+	<section>
+		<h2>Bower dependencies</h2>
+		<p>After running:</p>
+		<pre><code>
+	bower install
+		</code></pre>
+		<p>all your dependencies are going to be resolved. They are downloaded in the folder <code>bower_components</code> in the root of your bower project.</p>
+	</section>
+	<section>
+		<h2>Bower customization</h2>
+		<p>You can customize some of the default settings of bower by creating <code>.bowerrc</code>. The settings you can change with <code>.bowerrc</code> are pretty limited.</p>
+		<p>For further customization you can use the grunt bower plugin.</p>
+	</section>
+
+	<section>
+		<h2>Yeoman</h2>
+		<p>Sometimes there are plenty of common tasks we have to do in order to bootstrap our project.</p>
+		<ul>
+			<li>Create project structure (directories, index file, scripts files...)</li>
+			<li>Download all required libraries</li>
+			<li>Setup SASS, Less...</li>
+			<li>Connect all together</li>
+		</ul>
+	</section>
+	<section>
+		<h2>Yeoman</h2>
+		<p>Yeoman use different templates which are install as Node.js modules. These templates bootstrap our project.</p>
+		<p>There are many generators which are already available:</p>
+		<ul>
+			<li>Backbone.js</li>
+			<li>AngularJS</li>
+			<li>Ember.js</li>
+			<li>Web application</li>
+			<li>...</li>
+		</ul>
+		<p>Even this presentation is bootstrapped with Yeoman.</p>
+	</section>
+	<section>
+		<h2>Yeoman example</h2>
+		<pre><code>
+	#install yeoman
+	npm install -g yeoman
+
+	#install generator for AngularJS
+	npm install -g generator-angular
+
+	#create AngularJS application
+	yo angular
+		</code></pre>
+
+	</section>
+
+	<section>
+		<h2>Yeoman</h2>
+		<ul>
+			<li>Creates your project structure</li>
+			<li>Creates (almost) all Grunt tasks you might need</li>
+			<li>Generates <code>bower.json</code> with all dependencies you may need</li>
+		</ul>
+	</section>
+
+	<section>
+		<h1>Yeoman Demo</h1>
+	</section>
+
+
+<section>
+	<h1>Thank you!</h1>
+</section>
