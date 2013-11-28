@@ -272,7 +272,7 @@ console.log(localStorage.pencho); // pencho
     <p>Указваме функция, която да се изпълни, когато worker нишката изпрати съобщение към главната нишка</p>
     <pre><code class="javascript">
         worker.addEventListener('message', function(evt) {
-            var data = evt.data
+            var data = evt.data;
             console.log('received "' + data + '" from the worker thread');
         });
     </code></pre>
