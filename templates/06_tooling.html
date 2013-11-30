@@ -812,8 +812,8 @@ Future _loadFromDB(Database db) {
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       build: {
-        src: 'src/<%= pkg.name %>.js',
-        dest: 'build/<%= pkg.name %>.min.js'
+        src: 'src/&lt;%= pkg.name %&gt;.js',
+        dest: 'build/&lt;%= pkg.name %&gt;.min.js'
       }
     }
   });
@@ -836,11 +836,11 @@ module.exports = function(grunt) {
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        banner: '/*! &lt;%= pkg.name %&gt; &lt;%= grunt.template.today("yyyy-mm-dd") %&gt; */\n'
       },
       build: {
-        src: 'src/<%= pkg.name %>.js',
-        dest: 'build/<%= pkg.name %>.min.js'
+        src: 'src/&lt;%= pkg.name %&gt;.js',
+        dest: 'build/&lt;%= pkg.name %&gt;.min.js'
       }
     }
   });
