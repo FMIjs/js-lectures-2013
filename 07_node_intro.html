@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>JavaScript за напреднали</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="reveal.js/css/reveal.min.css">
+		<link rel="stylesheet" href="reveal.js/css/theme/serif.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="reveal.js/lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+                <style type="text/css">
+    .reveal section img {
+        border: none;
+        box-shadow: none;
+    }
+</style>
+
+<section data-markdown>
+    <script type="text/template">
+        ![node.js](../images/node_intro/nodejs.png)
+    </script>
+</section>
+
+<section>
+    <section data-markdown><script type="text/template">
+        как?
+
+        http://nodejs.org/download/
+        ![node download page](../images/node_intro/download.png)
+    </script></section>
+
+    <section data-markdown><script type="text/template">
+        как с по-малко мъка?
+
+        **N**ode **V**ersion **M**anager
+
+            curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+            nvm ls-remote
+            nvm install 0.10
+            nvm use 0.10
+
+        [**R**ead **T**he **F**ine **M**anual](https://github.com/creationix/nvm/blob/master/README.markdown)
+    </script></section>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        for the sake fo it
+
+            echo "console.log("Hello, world!');" > hello.js
+            node hello.js
+            Hello, world!
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        малко по-интересно
+
+            var http = require('http');
+            var server = http.createServer(function(request, response) {
+              response.writeHead(200, {'Content-Type': 'text/plain'});
+              response.write('Добрутру!');
+              response.end();
+            })
+
+            server.listen(8080);
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##require
+
+        * зареждане на модули
+            * вградени
+            * наши собствени
+        * връща обект
+        * синхронен е
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        ##http модула
+
+        * http.createServer
+        * http.createClient
+        * http.request
+        * http.Server
+        * ...
+        * [NodeJS API doc is your friend](http://nodejs.org/api/http.html)
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ###http.createServer([requestListener])
+
+        Приема един аргумент - handler за request event
+
+        requestListener има следната сигнатура:
+
+            function (request, response) {}
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ####Всъщност requestListener не е нищо особено специално
+
+        * **events.EventEmitter** - "клас", имплементиращ механизъм за излъчване(емитиране?) и обработване на събития
+
+        * Много обекти в стандартната библиотека на node наследяват EventEmitter
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        requestListener е първият обработчик за събитието request за създадения сървър
+
+        можем да добавим други и да махнем оригиналния, можем да не го подаваме при създаване на сървъра
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        ##url модула
+
+        * `url.parse` - приема символен низ съдържащ валиден URL и връща обект с подробна информация за него
+        * `url.format` - обратна на `url.parse`
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        `request` обекта, който се подава на requestListener
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        #Демо
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        ##https модула
+
+        аналогично на http модула, но с екстрата да подавате ключ и сертификат, които да служат за установяване на tls сесия
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        ##fs 
+
+        вече сме serverside и четенето и писането на файлове е съвсем естествено изискване
+
+        всичко е асинхронно по подразбиране
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        ##прост пример
+
+            var fs = require('fs');
+
+            fs.readFile('info.txt', function(err, data) {
+                if (!err) {
+                    console.log(data);
+                } else {
+                    console.error('An error occurred reading the file:');
+                    console.error(err);
+                }
+            });
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        `fs.readFile`
+
+        * връща веднага
+        * callback-а ще се случи най-рано на следващата итерация на event loop-а
+        * защото asynchronous I/O!(**buzzword alert!**)
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        ##fs.writeFile
+
+            var fs = require('fs');
+
+            fs.writeFile('info.txt', 'data to be written', function(err) {
+                if (err) {
+                    console.error("Writing the file failed!");
+                    console.error(err);
+                }
+            });
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        ##има синхронни версии
+
+        както `fs.readFile` и `fs.writeFile`, така и повечето други функции от стандартната библиотека на node имат и сънхронни(блокиращи) варианти
+
+        освен ако нямате много добро обяснение защо искате да ги ползвате, най-вероятно нямате причина да ги ползвате
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        * rename
+        * chown
+        * chmod
+        * stat
+        * link
+        * unlink
+        * rmdir
+        * ...
+
+        [**R**ead **T**he **F**ine **M**anual](http://nodejs.org/api/fs.html)
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        ##process модула
+
+        * exit([code=0])
+        * stdin
+        * stdout
+        * stderr
+        * **nextTick**
+        * ...
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        ####process.nextTick(func) != setTimeout(func, 0)
+
+        `nextTick` приема функция, която да се изпълни при следващата итерация на event loop-а.
+
+        `setTimeout` гарантира че функцията, която е подадена ще се изпълни *не по-рано* от указания интервал, но при много I/O операции, които трябва да се обработят е възможно да отнеме много повече време
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##асинхронни API-та
+
+        <pre><code>
+        function Reader(name) {
+            process.nextTick(function () {
+                this.io_operations();
+            }.bind(this));
+        }
+
+        var rdr = new Reader('info.txt');
+        rdr.set_options({});
+        </code></pre>
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##require
+
+        Вградена функция, която зарежда модул
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+            * `require('fs')` - зарежда вградения модул fs
+            * `require('./my_mod')` - зарежда файл като търси за
+                * my_mod.js
+                * my_mod.json
+                * my_mod.node
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/plain">
+        ##module
+        обект рефериращ текушия модул
+
+        <pre><code>
+        if (require.main === module) {
+            console.log('Running at top level');
+        } else {
+            console.log('Running as required from ' + module.parent.filename);
+        }
+        </code></pre>
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##module.exports
+        обектът, който require ще върне когато зареди модула
+
+            //my_module.js
+            module.exports.a = 42;
+            module.exports.b = 'foo';
+            ...
+            //somewhere else
+            var my_module = require('./my_module');
+            console.log(my_module.a); //42
+            console.log(my_module.b); //'foo'
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        module.exports не е специален тип обект, само името е важно
+
+            module.exports = new EventEmitter();
+            do_all_the_important_stuff(function (init_data ) {
+                module.exports.emit('done', init_data);
+            });
+
+            ...
+
+            var mod = require('./mod');
+            mod.on('done', function(init_data) { ... });
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #npm
+        ##Node Package Manager
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##npm
+        * инсталира пакети от [npmjs.org](https://npmjs.org)
+        * може да инсталира от хранилища
+        * по подразбиране инсталира локално за проект
+        * може да инсталира и глобално(implied sudo)
+
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##install / install -g
+
+        `npm install <pkg_name>` инсталира в `node_modules/` в текущата папка
+
+        `npm install -g <pkg_name>` инсталира на "глоблано" място(може да изисква права)
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##package.json
+
+        използва се за конфигурация на проекта
+
+        * dependencies
+        * package info
+    </script>
+</section>
+
+<!--
+
+npm
+-->
+
+            </div>
+
+		</div>
+
+		<script src="reveal.js/lib/js/head.min.js"></script>
+		<script src="reveal.js/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
