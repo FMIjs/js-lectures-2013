@@ -1,0 +1,322 @@
+<section data-markdown>
+    <script type="text/template">
+        #Web Sockets
+        ![sockets](../images/sockets/sockets.png) <!-- .element: class="fragment" data-fragment-index="3" -->
+        ###(муфи) <!-- .element: class="fragment" data-fragment-index="2" -->
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##Как работи ВЕБ-та?
+
+        ![http](../images/sockets/http.png)
+
+        ####DISCLAIMER: a bit too simplified <!-- .element: class="fragment" -->
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##Проблем?
+        ![problem](../images/sockets/problem.jpg)
+
+         * stateless <!-- .element: class="fragment" -->
+         * инициира се от клиента <!-- .element: class="fragment" -->
+         * отварянето на нов socket е скъпо <!-- .element: class="fragment" -->
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##~Решения
+
+         * cookies - решават доста по-различен проблем <!-- .element: class="fragment" -->
+         * flash, silverlight, java applets, прочее творения на Лукавия <!-- .element: class="fragment" -->
+         * long polling <!-- .element: class="fragment" -->
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##Решение
+
+        ![solution](../images/sockets/solution.jpg)
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #ws://
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #Защо?
+
+         * един socket
+         * "вечен"
+         * неограничено количество информация
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##Upgrade header-а
+
+            GET /mychat HTTP/1.1
+            Host: server.example.com
+            Upgrade: websocket
+            Connection: Upgrade
+            Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
+            Sec-WebSocket-Protocol: chat
+            Sec-WebSocket-Version: 12
+            Origin: http://example.com
+
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #Показно
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##socket.io
+        ####абстракция над тъжната действителност
+
+        яките идеи се стандартизират и приемат бавно
+
+        потребителите не се интересуват от тях и не разбират защо аджеба да позлват браузъри, които ги имплементират
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##transports
+
+        * WebSocket
+        * htmlfile
+        * xhr-polling
+        * jsonp-polling
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #Показно
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #Testing
+
+         * верифицираме <!-- .element: class="fragment" -->
+         * променяме уверено <!-- .element: class="fragment" -->
+         * локализираме проблеми по-лесно <!-- .element: class="fragment" -->
+         * ... <!-- .element: class="fragment" -->
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #Assertions
+
+        * *отстояването* на неща е валиден начин за тестване
+        * `assert(statement)`
+        * `AssertionError`
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #assert
+
+        * вградена функция за елементарен assertion
+        * няколко удобства под формата на property-та
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #[chai.js](http://chaijs.com)
+
+        ###assertion със захар
+
+        interfaces
+
+        * [assert](http://chaijs.com/api/assert/)
+        * [expect](http://chaijs.com/api/expect/)
+        * [should](http://chaijs.com/api/should/)
+
+        има [много хубав guide](http://chaijs.com/guide/)
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##assert
+
+            assert = require('chai').assert
+            foo = 'bar'
+            beverages = tea: ['chai', 'matcha', 'oolong']
+
+            assert.typeOf foo, 'string', 'foo is a string'
+            assert.equal foo, 'bar', 'foo equal `bar`'
+            assert.lengthOf foo, 3, 'foo`s value has a length of 3'
+            assert.lengthOf beverages.tea, 3, 'beverages has 3 types of tea'
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #BDD
+
+        * 'behaviour': захар върху assert
+        * предлага по-лесни за четене тестове
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ##expect
+
+            expect = require('chai').expect
+            expect('test').to.be.a 'string'
+
+        ##should
+
+            should = require('chai').should()
+            stuff = such: 'tdd', much: 'bdd', very: 'agile'
+            stuff.should.have.property('much').eq 'bdd'
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #mocha
+
+        Testing framework, с който да организирате тестовете си и
+        да събирате информация за случилото се при всяко пускане на тестовете
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #mocha
+
+        * **описвате** парче от кода си
+        * изреждате какво **то** трябва да прави в определени ситуации
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #mocha
+
+        * testing framework, който прихваща хвърлени грешки
+        * някой трябва да хвърля грешки(за предпочитане `AssertionError`)
+        * assert/chai.js/should.js/expect.js etc.
+
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        простичко
+
+        <pre><code>expect = require('chai').expect
+arithmetics = require('arithmetics')
+
+describe 'arithmetics', ->
+  describe 'sum', ->
+    it 'sums two numbers', ->
+      expect(arithmetics.sum 3, 5).to.eq 8
+    it 'sums more than two numbers', ->
+      expect(arithmetics.sum 2, 4, 6).to.eq 12
+
+  describe 'substract', ->
+    it 'substracts two numbers', ->
+      expect(arithmetics.substract 5, 3).to.eq 2
+        </code></pre>
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #async
+
+        <pre><code>describe 'the config file', ->
+  it 'can be parsed', ->
+    fs.readFile 'app.conf', (err, data) ->
+      err.should.be.false
+      parse(data).should.have.property('parsed').eq(3)
+        </code></pre>
+
+        * разчитаме да се хвърли AsssertionError или друга грешка
+        * когато `it` приключи вече е късно
+    </script>
+</section>
+
+
+<section data-markdown>
+    <script type="text/template">
+        > I had an issue with async callbacks, to I used more async callbacks
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #async
+
+        <pre><code>describe 'the config file', ->
+  it 'can be parsed', (done)->
+    fs.readFile 'app.conf', (err, data) ->
+      parse(data).should.have.property('parsed').eq(3)
+      done()
+        </code></pre>
+
+        (`Function.length`) <!-- .element: class="fragment" -->
+
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ###before/after
+
+        <pre><code>describe 'arithmetics', ->
+  names = {}
+
+  before ->
+    names = require 'arithmetics'
+  
+  it '...', ->
+    ...
+</code></pre>
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        ###after, beforeEach, afterEach
+    </script>
+</section>
+
+<section data-markdown>
+    <script type="text/template">
+        #interfaces
+
+        * bdd
+        * tdd
+        * exports
+        * qunit
+        * require
+    </script>
+</section>
+
+
